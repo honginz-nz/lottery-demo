@@ -1,110 +1,56 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>订单抽奖大转盘（测试版）</title>
-  <!-- 引入 Winwheel.js, GSAP, Howler.js, Confetti -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/Winwheel@2.7.0/Winwheel.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#f0f2f5; font-family:Arial,sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; }
-    .wrapper { background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); text-align:center; width:540px; }
-    h1 { margin-bottom:16px; color:#333; }
-    canvas { display:block; margin:0 auto 16px; }
-    input { width:60%; padding:8px; border:1px solid #ccc; border-radius:4px; font-size:14px; }
-    button { padding:8px 16px; margin-left:8px; border:none; border-radius:4px; background:#007bff; color:#fff; font-size:14px; cursor:pointer; transition:background .3s; }
-    button:disabled { background:#bbb; cursor:not-allowed; }
-    button:hover:enabled { background:#0056b3; }
-  </style>
-</head>
-<body>
-  <div class="wrapper">
-    <h1>订单抽奖大转盘（测试版）</h1>
-    <canvas id="wheelCanvas" width="500" height="500"></canvas>
-    <div>
-      <input id="orderInput" placeholder="输入订单号" />
-      <button id="spinBtn" disabled>开始抽奖</button>
+<div id="app" class="container">
+  <section class="turntable">
+    <div class="list">
+      <ul :style="{ transform: `rotate(${currentRotation}deg)` }">
+        <li v-for="(prize, index) in prizeList" :key="index" :style="{ transform: 'rotate(' + index * 45 + 'deg)' }">
+          <div v-html="prize.name"></div>
+          <img :src="prize.img" :alt="prize.name" />
+
+        </li>
+      </ul>
     </div>
-  </div>
-  <script>
-    // 测试用映射：直接在代码里定义，先保证功能无误
-    const orderPrizeMap = {
-      'ORDER10001': 2,
-      'ORDER10002': 4,
-      'ORDER10003': 5
-    };
-    const defaultPrizeIndex = 0; // 未匹配订单号时，默认《谢谢惠顾》
-
-    // 扇区定义
-    const segments = [
-      { text: '谢谢惠顾', fillStyle: '#eae56f' },
-      { text: '$5优惠券', fillStyle: '#89f26e' },
-      { text: '免单', fillStyle: '#7de6ef' },
-      { text: '全脂奶粉', fillStyle: '#e7706f' },
-      { text: '饮料', fillStyle: '#ff8c00' },
-      { text: '鸡蛋', fillStyle: '#da70d6' }
-    ];
-
-    // 音效
-    const tickSound = new Howl({ src: ['https://assets.simple-sounds.com/tick.mp3'], loop: true });
-    const winSound = new Howl({ src: ['https://assets.simple-sounds.com/win.mp3'] });
-
-    // 初始化转盘
-    const wheel = new Winwheel({
-      canvasId: 'wheelCanvas',
-      numSegments: segments.length,
-      outerRadius: 200,
-      textFontSize: 18,
-      segments: segments,
-      animation: {
-        type: 'spinToStop',
-        duration: 4,
-        spins: 6,
-        callbackSound: () => tickSound.play(),
-        callbackFinished: onFinish
-      }
-    });
-
-    // 画出初始转盘
-    wheel.draw();
-
-    const inputEl = document.getElementById('orderInput');
-    const btn = document.getElementById('spinBtn');
-
-    // 监听输入
-    inputEl.addEventListener('input', () => {
-      btn.disabled = inputEl.value.trim() === '';
-    });
-
-    btn.addEventListener('click', () => {
-      const order = inputEl.value.trim();
-      const idx = orderPrizeMap[order] != null ? orderPrizeMap[order] : defaultPrizeIndex;
-      // 保存文本
-      wheel.prizeText = segments[idx].text;
-      // 指定停靠
-      wheel.animation.stopAngle = wheel.getRandomForSegment(idx + 1);
-      // 禁用
-      btn.disabled = true;
-      inputEl.disabled = true;
-      // 播放并转动
-      tickSound.play();
-      wheel.startAnimation();
-    });
-
-    function onFinish() {
-      tickSound.stop();
-      winSound.play();
-      confetti({ particleCount: 150, spread: 60 });
-      setTimeout(() => {
-        alert(`订单 ${inputEl.value} 抽中：${wheel.prizeText}`);
-        btn.disabled = false;
-        inputEl.disabled = false;
-      }, 500);
-    }
-  </script>
-</body>
-</html>
+    <button type="button" class="turntable_btn" @click="startDraw" :disabled="isSpinning">GO</button>
+    <svg viewBox="-50 -50 100 100">
+      <g class="bottom">
+        <ellipse cx="0" cy="40" rx="30" ry="4" />
+      </g>
+      <g class="polyline" :style="{ transform: `rotate(${currentRotation}deg)` }">
+        <polyline points="-16,-38 16,-38 0,0" />
+        <polyline points="16,-38 38,-16 0,0" />
+        <polyline points="38,-16 38,16 0,0" />
+        <polyline points="0,0 38,16 16,38" />
+        <polyline points="0,0 16,38 -16,38" />
+        <polyline points="0,0 -16,38 -38,16" />
+        <polyline points="-38,-16 -38,16 0,0" />
+        <polyline points="-16,-38 -38,-16 0,0" />
+      </g>
+      <circle cx="0" cy="0" r="40" />
+      <g class="circle" :style="{
+     transform: 'rotate(' + currentRotation + 'deg)',
+     transition: isSpinning ? 'transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1)' : 'none'
+   }">
+        <circle cx="0" cy="-40" r="0.8" />
+        <circle cx="15.6" cy="-36.8" r="0.8" />
+        <circle cx="28.5" cy="-28" r="0.8" />
+        <circle cx="36.8" cy="-15.6" r="0.8" />
+        <circle cx="40" cy="0" r="0.8" />
+        <circle cx="36.8" cy="15.6" r="0.8" />
+        <circle cx="28.5" cy="28" r="0.8" />
+        <circle cx="15.6" cy="36.8" r="0.8" />
+        <circle cx="0" cy="40" r="0.8" />
+        <circle cx="-36.8" cy="15.6" r="0.8" />
+        <circle cx="-28.5" cy="28" r="0.8" />
+        <circle cx="-15.6" cy="36.8" r="0.8" />
+        <circle cx="-40" cy="0" r="0.8" />
+        <circle cx="-36.8" cy="-15.6" r="0.8" />
+        <circle cx="-28.5" cy="-28" r="0.8" />
+        <circle cx="-15.6" cy="-36.8" r="0.8" />
+      </g>
+      <g class="mark">
+        <circle cx="0" cy="-43" r="4" />
+        <polyline points="-3.5,-41 3.5,-41 0,-35" />
+        <circle class="round" cx="0" cy="-43" r="1.5" />
+      </g>
+    </svg>
+  </section>
+</div>
