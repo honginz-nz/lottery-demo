@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>订单抽奖页面</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+    #display { font-size: 48px; margin: 30px 0; height: 60px; line-height: 60px;
+               border: 2px solid #333; display: inline-block; width: 300px; }
+    input, button { padding: 10px; font-size: 16px; margin: 5px; }
+  </style>
+</head>
+<body>
+  <h1>订单抽奖</h1>
+  <p>请输入中奖订单号（可选）：</p>
+  <input type="text" id="winnerInput" placeholder="例如：ORDER12345">
+  <br>
+  <button id="startBtn">开始抽奖</button>
+  <div id="display">--</div>
+  <script>
+    let orders = [];
+    // 加载最新订单列表
+    fetch('orders.json')
+      .then(r => r.json())
+      .then(data => { orders = data; })
+      .catch(err => console.error('拉取 orders.json 失败', err));
+
+    const display = document.getElementById('display');
+    const startBtn = document.getElementById('startBtn');
+    const winnerInput = document.getElementById('winnerInput');
+
+    startBtn.addEventListener('click', () => {
+      if (orders.length === 0) {
+        alert('订单列表尚未加载完成，请稍后再试');
+        return;
+      }
+      startBtn.disabled = true;
+      winnerInput.disabled = true;
+      let winner = winnerInput.value.trim();
+      let winnerIndex = orders.indexOf(winner);
+      if (winnerIndex < 0) {
+        winnerIndex = Math.floor(Math.random() * orders.length);
+      }
+      const cycles = 5;
+      const totalTicks = orders.length * cycles + winnerIndex;
+      let count = 0;
+      const interval = setInterval(() => {
+        const idx = count % orders.length;
+        display.textContent = orders[idx];
+        count++;
+        if (count > totalTicks) {
+          clearInterval(interval);
+          display.textContent = orders[winnerIndex];
+          startBtn.disabled = false;
+          winnerInput.disabled = false;
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>
