@@ -1,11 +1,7 @@
 {
-  "defaultWinner": "ORDER20068",
-  "orders": [
-    "ORDER10001",
-    "ORDER10002",
-    "ORDER10003",
-    "ORDER10004",
-    "ORDER10005",
-    "ORDER20068"  
-  ]
+  "orderPrizeMap": {
+    "ORDER10001": 2,
+    "ORDER10002": 4
+  },
+  "defaultPrizeIndex": 0
 }
