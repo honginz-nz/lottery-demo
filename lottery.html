@@ -2,63 +2,126 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>订单抽奖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-    #display { font-size: 48px; margin: 30px 0; line-height:60px;
-               border:2px solid #333; display:inline-block; width:300px; }
-    input, button { padding:10px; font-size:16px; margin:5px; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #FAD961 0%, #F76B1C 100%);
+      color: #333;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      padding: 40px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 24px;
+      color: #F76B1C;
+    }
+    p {
+      margin-bottom: 16px;
+      font-size: 1rem;
+    }
+    input {
+      width: calc(100% - 20px);
+      padding: 12px;
+      font-size: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      transition: border 0.3s;
+    }
+    input:focus {
+      outline: none;
+      border-color: #F76B1C;
+    }
+    button {
+      margin-top: 16px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      background: #F76B1C;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    button:not(:disabled):hover {
+      background: #FAD961;
+      transform: translateY(-2px);
+    }
+    #display {
+      margin-top: 32px;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #F76B1C;
+      border: 2px dashed #F76B1C;
+      border-radius: 8px;
+      padding: 16px;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation-duration: 0.5s;
+      animation-fill-mode: both;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
-  <h1>订单抽奖</h1>
-  <p>请输入中奖订单号（可选）：</p>
-  <input type="text" id="winnerInput" placeholder="例如：ORDER12345">
-  <br>
-  <button id="startBtn" disabled>开始抽奖</button>
-  <div id="display">--</div>
+  <div class="container">
+    <h1>订单抽奖</h1>
+    <p>请输入中奖订单号（可选）</p>
+    <input type="text" id="winnerInput" placeholder="例如：ORDER12345">
+    <button id="startBtn" disabled>开始抽奖</button>
+    <div id="display">--</div>
+  </div>
 
   <script>
     let orders = [], defaultWinner = '';
     const display = document.getElementById('display');
-    const btn     = document.getElementById('startBtn');
-    const input   = document.getElementById('winnerInput');
+    const btn = document.getElementById('startBtn');
+    const input = document.getElementById('winnerInput');
 
-    // 拉取包含 orders & defaultWinner 的 JSON，带时间戳防缓存
     fetch(`orders.json?_=${Date.now()}`, { cache: 'no-store' })
-      .then(r => {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.json();
-      })
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(cfg => {
         orders = cfg.orders;
         defaultWinner = cfg.defaultWinner;
-        console.log('Loaded orders:', orders);
-        console.log('Default winner:', defaultWinner);
-        btn.disabled = false;  // 数据就绪后解禁按钮
+        btn.disabled = false;
       })
       .catch(err => {
-        console.error('拉取 orders.json 失败:', err);
         display.textContent = '加载订单失败';
+        console.error(err);
       });
 
-    // 抽奖逻辑
     btn.addEventListener('click', () => {
-      if (orders.length === 0) {
-        alert('订单列表尚未加载，请稍后再试');
-        return;
-      }
+      if (orders.length === 0) return;
       btn.disabled = true;
       input.disabled = true;
 
       const txt = input.value.trim();
       let winner = txt === '' ? defaultWinner : txt;
-      console.log('Desired winner:', winner);
-
       let idx = orders.indexOf(winner);
       if (idx < 0) idx = Math.floor(Math.random() * orders.length);
-      console.log('Winner index:', idx);
 
       const cycles = 5, total = orders.length * cycles + idx;
       let count = 0;
@@ -68,6 +131,7 @@
         if (count > total) {
           clearInterval(iv);
           display.textContent = orders[idx];
+          display.style.animation = 'pop 0.5s ease';
           btn.disabled = false;
           input.disabled = false;
         }
