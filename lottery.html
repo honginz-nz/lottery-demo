@@ -3,140 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>订单抽奖</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <title>订单抽奖大转盘</title>
+  <!-- Winwheel.js & GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/Winwheel@2.7.0/Winwheel.min.js"></script>
+  <!-- Howler.js 音效 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #FAD961 0%, #F76B1C 100%);
-      color: #333;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .container {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      padding: 40px;
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 24px;
-      color: #F76B1C;
-    }
-    p {
-      margin-bottom: 16px;
-      font-size: 1rem;
-    }
-    input {
-      width: calc(100% - 20px);
-      padding: 12px;
-      font-size: 1rem;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      transition: border 0.3s;
-    }
-    input:focus {
-      outline: none;
-      border-color: #F76B1C;
-    }
-    button {
-      margin-top: 16px;
-      padding: 12px 24px;
-      font-size: 1rem;
-      background: #F76B1C;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
-    button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-    button:not(:disabled):hover {
-      background: #FAD961;
-      transform: translateY(-2px);
-    }
-    #display {
-      margin-top: 32px;
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #F76B1C;
-      border: 2px dashed #F76B1C;
-      border-radius: 8px;
-      padding: 16px;
-      min-height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation-duration: 0.5s;
-      animation-fill-mode: both;
-    }
-    @keyframes pop {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
+    body { background: #f0f4f8; font-family: 'Arial', sans-serif; display: flex; height: 100vh; align-items: center; justify-content: center; }
+    .lottery-container { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
+    h1 { color: #333; margin-bottom: 16px; }
+    #orderInput { width: 200px; padding: 8px; font-size: 14px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 4px; }
+    #spinBtn { padding: 10px 20px; font-size: 14px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; transition: background 0.3s; }
+    #spinBtn:disabled { background: #ccc; cursor: not-allowed; }
+    #spinBtn:hover:enabled { background: #0056b3; }
+    #wheelCanvas { margin-top: 20px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>订单抽奖</h1>
-    <p>请输入中奖订单号（可选）</p>
-    <input type="text" id="winnerInput" placeholder="例如：ORDER12345">
-    <button id="startBtn" disabled>开始抽奖</button>
-    <div id="display">--</div>
+  <div class="lottery-container">
+    <h1>订单抽奖大转盘</h1>
+    <input id="orderInput" type="text" placeholder="输入订单号，即可抽奖">
+    <button id="spinBtn" disabled>开始抽奖</button>
+    <canvas id="wheelCanvas" width="500" height="500"></canvas>
   </div>
 
   <script>
-    let orders = [], defaultWinner = '';
-    const display = document.getElementById('display');
-    const btn = document.getElementById('startBtn');
-    const input = document.getElementById('winnerInput');
+    // 音效
+    const tickSound = new Howl({ src: ['https://example.com/tick.mp3'], loop: true });
+    const winSound  = new Howl({ src: ['https://example.com/win.mp3'] });
 
-    fetch(`orders.json?_=${Date.now()}`, { cache: 'no-store' })
-      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-      .then(cfg => {
-        orders = cfg.orders;
-        defaultWinner = cfg.defaultWinner;
-        btn.disabled = false;
-      })
-      .catch(err => {
-        display.textContent = '加载订单失败';
-        console.error(err);
-      });
+    // 定义奖项及其索引说明：
+    // 0: '谢谢惠顾'
+    // 1: '$5小程序无门槛优惠券'
+    // 2: '免单'
+    // 3: '安佳全脂奶粉'
+    // 4: '饮料'
+    // 5: '鸡蛋'
+    const segments = [
+      { text: '谢谢惠顾', fillStyle: '#eae56f' },
+      { text: '$5小程序无门槛优惠券', fillStyle: '#89f26e' },
+      { text: '免单', fillStyle: '#7de6ef' },
+      { text: '安佳全脂奶粉', fillStyle: '#e7706f' },
+      { text: '饮料', fillStyle: '#ff8c00' },
+      { text: '鸡蛋', fillStyle: '#da70d6' }
+    ];
 
-    btn.addEventListener('click', () => {
-      if (orders.length === 0) return;
-      btn.disabled = true;
-      input.disabled = true;
-
-      const txt = input.value.trim();
-      let winner = txt === '' ? defaultWinner : txt;
-      let idx = orders.indexOf(winner);
-      if (idx < 0) idx = Math.floor(Math.random() * orders.length);
-
-      const cycles = 5, total = orders.length * cycles + idx;
-      let count = 0;
-      const iv = setInterval(() => {
-        display.textContent = orders[count % orders.length];
-        count++;
-        if (count > total) {
-          clearInterval(iv);
-          display.textContent = orders[idx];
-          display.style.animation = 'pop 0.5s ease';
-          btn.disabled = false;
-          input.disabled = false;
-        }
-      }, 100);
+    // 创建 Winwheel 转盘
+    const wheel = new Winwheel({
+      canvasId: 'wheelCanvas',
+      numSegments: segments.length,
+      outerRadius: 200,
+      textFontSize: 16,
+      segments: segments,
+      animation: {
+        type: 'spinToStop',
+        duration: 5,
+        spins: 8,
+        callbackSound: () => tickSound.play(),
+        callbackFinished: onFinish
+      }
     });
+
+    let orderPrizeMap = {};
+    let defaultPrizeIndex = 0;  // 默认使用扇区索引，0 对应“谢谢惠顾”扇区
+
+    const orderInput = document.getElementById('orderInput');
+    const spinBtn = document.getElementById('spinBtn');
+
+    // 加载 JSON，获取订单->奖项映射及默认奖项索引
+    // orders.json 格式示例：
+    // {
+    //   "orderPrizeMap": {
+    //     "ORDER10001": 2,    // 索引 2 => 扇区 '免单'
+    //     "ORDER10002": 4     // 索引 4 => 扇区 '饮料'
+    //   },
+    //   "defaultPrizeIndex": 1  // 默认扇区索引 1 => '$5小程序无门槛优惠券'
+    // }
+    fetch(`orders.json?_=${Date.now()}`, { cache: 'no-store' })
+      .then(r => r.json())
+      .then(cfg => {
+        orderPrizeMap = cfg.orderPrizeMap || {};
+        defaultPrizeIndex = cfg.defaultPrizeIndex != null ? cfg.defaultPrizeIndex : 0;
+        spinBtn.disabled = false;
+      })
+      .catch(err => alert('加载配置失败'));
+
+    spinBtn.addEventListener('click', () => {
+      const order = orderInput.value.trim();
+      if (!order) return alert('请输入订单号');
+
+      // 确定抽奖扇区索引：若映射中存在订单，则用其值；否则使用 defaultPrizeIndex
+      const prizeIndex = orderPrizeMap[order] != null ? orderPrizeMap[order] : defaultPrizeIndex;
+      const prizeText  = segments[prizeIndex].text;
+
+      // 计算停止角度（Winwheel 的分段从1开始）
+      const stopAt = wheel.getRandomForSegment(prizeIndex + 1);
+      wheel.animation.stopAngle = stopAt;
+
+      // 播放转盘音效并启动动画
+      tickSound.play();
+      wheel.startAnimation();
+
+      // 禁用交互
+      spinBtn.disabled = true;
+      orderInput.disabled = true;
+
+      // 存储本次中奖文本，动画结束时使用
+      wheel.prizeText = prizeText;
+    });
+
+    function onFinish() {
+      tickSound.stop();
+      winSound.play();
+      confetti({ particleCount: 200, spread: 60 });
+
+      setTimeout(() => {
+        alert(`订单 ${orderInput.value} 抽中：${wheel.prizeText}`);
+        spinBtn.disabled = false;
+        orderInput.disabled = false;
+      }, 500);
+    }
   </script>
 </body>
 </html>
