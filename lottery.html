@@ -37,7 +37,8 @@
       }
       startBtn.disabled = true;
       winnerInput.disabled = true;
-      let winner = winnerInput.value.trim();
+      // 如果输入框为空，就用指定的必中号
+      let winner = winnerInput.value.trim() || 'ORDER20088';
       let winnerIndex = orders.indexOf(winner);
       if (winnerIndex < 0) {
         winnerIndex = Math.floor(Math.random() * orders.length);
