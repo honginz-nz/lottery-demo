@@ -1,0 +1,219 @@
+@charset "UTF-8";
+
+@keyframes shiny {
+  0% {
+    fill: white;
+  }
+  50% {
+    fill: #ffc242;
+  }
+  100% {
+    fill: white;
+  }
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "微軟正黑體";
+}
+
+body {
+  background-color: #3dbfbb;
+}
+
+.container {
+  max-width: 1000px;
+  min-width: 400px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+section.turntable {
+  position: relative;
+  max-width: 1000px;
+  max-height: 1000px;
+}
+
+section.turntable div.list {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 70%;
+  text-align: center;
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+/* section.turntable div.list ul {
+  list-style: none;
+  width: 100%;
+  height: 100%;
+  transition: transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transform-origin: center center;
+} */
+
+section.turntable div.list ul {
+  list-style: none;
+  width: 100%;
+  height: 100%;
+  /* 加上旋轉原點 */
+  transform-origin: center center;
+
+  /* 加上 transition 跟底圖相同 */
+  transition: transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.circle {
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+section.turntable div.list ul li {
+  color: #fff;
+  font-size: 22.4px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+section.turntable div.list ul li:nth-child(2) {
+  transform: rotate(315deg);
+}
+section.turntable div.list ul li:nth-child(3) {
+  transform: rotate(270deg);
+}
+section.turntable div.list ul li:nth-child(4) {
+  transform: rotate(225deg);
+}
+section.turntable div.list ul li:nth-child(5) {
+  transform: rotate(180deg);
+}
+section.turntable div.list ul li:nth-child(6) {
+  transform: rotate(135deg);
+}
+section.turntable div.list ul li:nth-child(7) {
+  transform: rotate(90deg);
+}
+section.turntable div.list ul li:nth-child(8) {
+  transform: rotate(45deg);
+}
+
+section.turntable div.list ul li img {
+  width: 70px;
+  margin-top: 5px;
+}
+
+section.turntable button.turntable_btn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: none;
+  border: none;
+  outline: none;
+  font-weight: 900;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  font-size: 70px;
+  color: #0080c0;
+  background-color: #ffb929;
+  cursor: pointer;
+}
+
+section.turntable button.turntable_btn:active,
+section.turntable button.turntable_btn:disabled {
+  cursor: default;
+}
+
+section.turntable button.turntable_btn::after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  content: "";
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  background-color: #ffe3a8;
+  z-index: -1;
+  box-shadow: 1px 2px 4px #754f00;
+}
+
+section.turntable svg > circle {
+  fill: none;
+  stroke: #006fa7;
+  stroke-width: 5px;
+}
+
+/* 這是關鍵：讓底圖 polyline 用同樣的旋轉中心和變換 */
+section.turntable svg g.polyline {
+  transform-box: fill-box; /* 讓 transform-origin 正確作用 */
+  transform-origin: center; /* 旋轉中心置中 */
+  transition: transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* polyline 顏色設定 */
+section.turntable svg g.polyline polyline {
+  fill: #0080c0;
+}
+
+section.turntable svg g.polyline polyline:nth-child(odd) {
+  fill: #00a2f3;
+}
+
+/* 補充：其他 SVG 裝飾的CSS維持不變 */
+
+section.turntable svg g.circle circle {
+  fill: #fff;
+  stroke: none;
+  box-shadow: 0px 2px 5px #ccc;
+}
+
+section.turntable svg g.circle circle:nth-child(odd) {
+  animation: shiny 0.8s linear infinite;
+}
+
+section.turntable svg g.circle circle:nth-child(even) {
+  animation: shiny 0.8s 0.5s linear infinite;
+}
+
+section.turntable svg g.mark circle {
+  fill: #ffb10f;
+}
+
+section.turntable svg g.mark circle.round {
+  fill: none;
+  stroke: #ffebc2;
+}
+
+section.turntable svg g.mark polyline {
+  fill: #ffb10f;
+  stroke: none;
+}
+
+section.turntable svg g.bottom {
+  fill: rgba(0, 0, 0, 0.4);
+}
+
+/* 響應式調整圖片大小 */
+@media screen and (max-width: 767px) {
+  section.turntable div.list ul li {
+    font-size: 14px;
+  }
+  section.turntable div.list ul li img {
+    width: 40px;
+  }
+  section.turntable button.turntable_btn {
+    font-size: 42px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  section.turntable div.list ul li img {
+    display: none;
+  }
+}
