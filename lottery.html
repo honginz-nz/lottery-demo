@@ -5,25 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>订单抽奖</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 50px;
-    }
-    #display {
-      font-size: 48px;
-      margin: 30px 0;
-      height: 60px;
-      line-height: 60px;
-      border: 2px solid #333;
-      display: inline-block;
-      width: 300px;
-    }
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      margin: 5px;
-    }
+    body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+    #display { font-size: 48px; margin: 30px 0; line-height:60px;
+               border:2px solid #333; display:inline-block; width:300px; }
+    input, button { padding:10px; font-size:16px; margin:5px; }
   </style>
 </head>
 <body>
@@ -35,66 +20,56 @@
   <div id="display">--</div>
 
   <script>
-    let orders = [];
-    let defaultWinner = '';
-    const display     = document.getElementById('display');
-    const startBtn    = document.getElementById('startBtn');
-    const winnerInput = document.getElementById('winnerInput');
+    let orders = [], defaultWinner = '';
+    const display = document.getElementById('display');
+    const btn     = document.getElementById('startBtn');
+    const input   = document.getElementById('winnerInput');
 
-    // 1. 拉取包含 orders & defaultWinner 的 JSON，带时间戳防缓存
+    // 拉取包含 orders & defaultWinner 的 JSON，带时间戳防缓存
     fetch(`orders.json?_=${Date.now()}`, { cache: 'no-store' })
       .then(r => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       })
       .then(cfg => {
         orders = cfg.orders;
         defaultWinner = cfg.defaultWinner;
-        console.log('Orders loaded:', orders);
+        console.log('Loaded orders:', orders);
         console.log('Default winner:', defaultWinner);
-        startBtn.disabled = false;  // 数据就绪后解禁按钮
+        btn.disabled = false;  // 数据就绪后解禁按钮
       })
       .catch(err => {
         console.error('拉取 orders.json 失败:', err);
         display.textContent = '加载订单失败';
       });
 
-    // 2. 抽奖逻辑
-    startBtn.addEventListener('click', () => {
-      // 先保证 orders 已加载
+    // 抽奖逻辑
+    btn.addEventListener('click', () => {
       if (orders.length === 0) {
-        alert('订单列表尚未加载完成，请稍后再试');
+        alert('订单列表尚未加载，请稍后再试');
         return;
       }
+      btn.disabled = true;
+      input.disabled = true;
 
-      // 禁用 UI 防止重复点击
-      startBtn.disabled = true;
-      winnerInput.disabled = true;
-
-      // 决定中哪个号：输入框空则用 defaultWinner，否则用输入；输入不在列表则随机
-      const input = winnerInput.value.trim();
-      let winner = input === '' ? defaultWinner : input;
+      const txt = input.value.trim();
+      let winner = txt === '' ? defaultWinner : txt;
       console.log('Desired winner:', winner);
 
       let idx = orders.indexOf(winner);
-      if (idx < 0) {
-        idx = Math.floor(Math.random() * orders.length);
-      }
+      if (idx < 0) idx = Math.floor(Math.random() * orders.length);
       console.log('Winner index:', idx);
 
-      // 滚动动画
-      const cycles     = 5;
-      const totalTicks = orders.length * cycles + idx;
-      let count        = 0;
+      const cycles = 5, total = orders.length * cycles + idx;
+      let count = 0;
       const iv = setInterval(() => {
         display.textContent = orders[count % orders.length];
         count++;
-        if (count > totalTicks) {
+        if (count > total) {
           clearInterval(iv);
           display.textContent = orders[idx];
-          // 恢复按钮
-          startBtn.disabled = false;
-          winnerInput.disabled = false;
+          btn.disabled = false;
+          input.disabled = false;
         }
       }, 100);
     });
