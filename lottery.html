@@ -38,7 +38,7 @@
     let orders = [];
 
     // 1. 加载最新订单列表
-    fetch('orders.json')
+    fetch('orders.json', { cache: 'no-store' })
       .then(r => r.json())
       .then(data => {
         orders = data;
