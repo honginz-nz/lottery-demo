@@ -1,138 +1,110 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>订单抽奖大转盘</title>
-  <!-- 引入依赖 -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>订单抽奖大转盘（测试版）</title>
+  <!-- 引入 Winwheel.js, GSAP, Howler.js, Confetti -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/Winwheel@2.7.0/Winwheel.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#f0f4f8; font-family:Arial,sans-serif; display:flex; justify-content:center; align-items:center; height:100vh; }
-    .container { background:#fff; padding:24px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); text-align:center; width:600px; }
+    body { background:#f0f2f5; font-family:Arial,sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; }
+    .wrapper { background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); text-align:center; width:540px; }
     h1 { margin-bottom:16px; color:#333; }
-    #wheelCanvas { display:block; margin:0 auto 20px; }
-    input { width:60%; padding:8px; font-size:14px; border:1px solid #ccc; border-radius:4px; }
-    button { margin-left:8px; padding:8px 16px; font-size:14px; border:none; border-radius:4px; background:#007bff; color:#fff; cursor:pointer; transition:background .3s; }
-    button:disabled { background:#ccc; cursor:not-allowed; }
+    canvas { display:block; margin:0 auto 16px; }
+    input { width:60%; padding:8px; border:1px solid #ccc; border-radius:4px; font-size:14px; }
+    button { padding:8px 16px; margin-left:8px; border:none; border-radius:4px; background:#007bff; color:#fff; font-size:14px; cursor:pointer; transition:background .3s; }
+    button:disabled { background:#bbb; cursor:not-allowed; }
     button:hover:enabled { background:#0056b3; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>订单抽奖大转盘</h1>
-    <!-- 大转盘画布 -->
+  <div class="wrapper">
+    <h1>订单抽奖大转盘（测试版）</h1>
     <canvas id="wheelCanvas" width="500" height="500"></canvas>
-    <!-- 输入与按钮 -->
     <div>
-      <input id="orderInput" type="text" placeholder="输入订单号，即可抽奖">
+      <input id="orderInput" placeholder="输入订单号" />
       <button id="spinBtn" disabled>开始抽奖</button>
     </div>
   </div>
-
   <script>
-    window.onload = function() {
-      // 音效
-      const tickSound = new Howl({ src:['https://example.com/tick.mp3'], loop:true });
-      const winSound  = new Howl({ src:['https://example.com/win.mp3'] });
-
-      // 奖项扇区定义
-      const segments = [
-        { text:'谢谢惠顾', fillStyle:'#eae56f' },
-        { text:'$5小程序无门槛优惠券', fillStyle:'#89f26e' },
-        { text:'免单', fillStyle:'#7de6ef' },
-        { text:'安佳全脂奶粉', fillStyle:'#e7706f' },
-        { text:'饮料', fillStyle:'#ff8c00' },
-        { text:'鸡蛋', fillStyle:'#da70d6' }
-      ];
-
-      // 初始化 Winwheel
-      const wheel = new Winwheel({
-        canvasId:'wheelCanvas',
-        numSegments:segments.length,
-        outerRadius:200,
-        textFontSize:16,
-        segments:segments,
-        animation:{ type:'spinToStop', duration:5, spins:8,
-          callbackSound: ()=>tickSound.play(),
-          callbackFinished:onFinish
-        }
-      });
-      // 画面先显示转盘
-      wheel.draw();
-
-      let orderPrizeMap = {}, defaultPrizeIndex = 0, ordersArr = [];
-      const inputEl = document.getElementById('orderInput');
-      const spinBtn = document.getElementById('spinBtn');
-
-      // 监听输入，只有输入非空且配置已加载完成才启用按钮
-      inputEl.addEventListener('input', () => {
-        spinBtn.disabled = inputEl.value.trim() === '';
-      });
-
-      // 加载配置信息
-      fetch(`orders.json?_=${Date.now()}`,{cache:'no-store'})
-        .then(r=>r.json())
-        .then(cfg=>{
-          // 兼容旧格式 & 新格式
-          if(Array.isArray(cfg.orders)){
-            ordersArr = cfg.orders;
-            defaultPrizeIndex = segments.findIndex(s=>s.text===cfg.defaultWinner);
-            if(defaultPrizeIndex<0) defaultPrizeIndex=0;
-          } else {
-            orderPrizeMap = cfg.orderPrizeMap||{};
-            defaultPrizeIndex = cfg.defaultPrizeIndex||0;
-          }
-          // 如果输入框已有内容，立即更新按钮状态
-          if(inputEl.value.trim() !== '') spinBtn.disabled = false;
-        })
-        .catch(err=>{ console.error('加载配置失败',err); alert('加载配置失败'); });
-
-      // 点击抽奖
-      spinBtn.addEventListener('click', ()=>{
-        const order = inputEl.value.trim();
-        if(!order) return;
-
-        // 选择奖项索引
-        let prizeIndex;
-        if(ordersArr.length && Object.keys(orderPrizeMap).length===0){
-          const idx = ordersArr.indexOf(order);
-          prizeIndex = idx>=0? idx : defaultPrizeIndex;
-        } else {
-          prizeIndex = orderPrizeMap[order] != null? orderPrizeMap[order] : defaultPrizeIndex;
-        }
-
-        // 记录中奖文本
-        const prizeText = segments[prizeIndex].text;
-        wheel.prizeText = prizeText;
-
-        // 设置停止角度
-        wheel.animation.stopAngle = wheel.getRandomForSegment(prizeIndex+1);
-        // 播放与启动
-        tickSound.play();
-        wheel.startAnimation();
-
-        // 禁用交互
-        spinBtn.disabled = true;
-        inputEl.disabled = true;
-      });
-
-      // 转盘结束回调
-      function onFinish(){
-        tickSound.stop();
-        winSound.play();
-        confetti({particleCount:200,spread:60});
-        setTimeout(()=>{
-          alert(`订单 ${inputEl.value} 抽中：${wheel.prizeText}`);
-          // 恢复交互
-          inputEl.disabled = false;
-          spinBtn.disabled = inputEl.value.trim() === '';
-        },500);
-      }
+    // 测试用映射：直接在代码里定义，先保证功能无误
+    const orderPrizeMap = {
+      'ORDER10001': 2,
+      'ORDER10002': 4,
+      'ORDER10003': 5
     };
+    const defaultPrizeIndex = 0; // 未匹配订单号时，默认《谢谢惠顾》
+
+    // 扇区定义
+    const segments = [
+      { text: '谢谢惠顾', fillStyle: '#eae56f' },
+      { text: '$5优惠券', fillStyle: '#89f26e' },
+      { text: '免单', fillStyle: '#7de6ef' },
+      { text: '全脂奶粉', fillStyle: '#e7706f' },
+      { text: '饮料', fillStyle: '#ff8c00' },
+      { text: '鸡蛋', fillStyle: '#da70d6' }
+    ];
+
+    // 音效
+    const tickSound = new Howl({ src: ['https://assets.simple-sounds.com/tick.mp3'], loop: true });
+    const winSound = new Howl({ src: ['https://assets.simple-sounds.com/win.mp3'] });
+
+    // 初始化转盘
+    const wheel = new Winwheel({
+      canvasId: 'wheelCanvas',
+      numSegments: segments.length,
+      outerRadius: 200,
+      textFontSize: 18,
+      segments: segments,
+      animation: {
+        type: 'spinToStop',
+        duration: 4,
+        spins: 6,
+        callbackSound: () => tickSound.play(),
+        callbackFinished: onFinish
+      }
+    });
+
+    // 画出初始转盘
+    wheel.draw();
+
+    const inputEl = document.getElementById('orderInput');
+    const btn = document.getElementById('spinBtn');
+
+    // 监听输入
+    inputEl.addEventListener('input', () => {
+      btn.disabled = inputEl.value.trim() === '';
+    });
+
+    btn.addEventListener('click', () => {
+      const order = inputEl.value.trim();
+      const idx = orderPrizeMap[order] != null ? orderPrizeMap[order] : defaultPrizeIndex;
+      // 保存文本
+      wheel.prizeText = segments[idx].text;
+      // 指定停靠
+      wheel.animation.stopAngle = wheel.getRandomForSegment(idx + 1);
+      // 禁用
+      btn.disabled = true;
+      inputEl.disabled = true;
+      // 播放并转动
+      tickSound.play();
+      wheel.startAnimation();
+    });
+
+    function onFinish() {
+      tickSound.stop();
+      winSound.play();
+      confetti({ particleCount: 150, spread: 60 });
+      setTimeout(() => {
+        alert(`订单 ${inputEl.value} 抽中：${wheel.prizeText}`);
+        btn.disabled = false;
+        inputEl.disabled = false;
+      }, 500);
+    }
   </script>
 </body>
 </html>
