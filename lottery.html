@@ -1,3 +1,4 @@
+<!-- lottery.html -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -45,10 +46,23 @@
 
       <!-- 指针 + 扇区分隔线 + 外圈圆点 + 底座 -->
       <svg viewBox="-50 -50 100 100">
+        <!-- 1. 渐变定义 -->
+        <defs>
+          <radialGradient id="outer-gradient"
+                          cx="50%" cy="50%" r="50%"
+                          gradientUnits="userSpaceOnUse">
+            <!-- 中心深色 -->
+            <stop offset="0%"   stop-color="#fe9a24"/>
+            <!-- 边缘浅色 -->
+            <stop offset="100%" stop-color="#ffe089"/>
+          </radialGradient>
+        </defs>
+
         <!-- 底座阴影 -->
         <g class="bottom">
           <ellipse cx="0" cy="40" rx="30" ry="4" />
         </g>
+
         <!-- 扇区分隔线 -->
         <g class="polyline" :style="{ transform: `rotate(${currentRotation}deg)` }">
           <polyline points="-16,-38 16,-38 0,0" />
@@ -60,8 +74,13 @@
           <polyline points="-38,-16 -38,16 0,0" />
           <polyline points="-16,-38 -38,-16 0,0" />
         </g>
+
         <!-- 中心圆环 -->
         <circle cx="0" cy="0" r="40" />
+
+        <!-- 外框圆环（使用径向渐变描边） -->
+        <circle class="outer-ring" cx="0" cy="0" r="48" />
+
         <!-- 外圈 16 个小圆点 -->
         <g
           class="circle"
@@ -89,6 +108,7 @@
           <circle cx="-28.5" cy="-28"  r="0.8" />
           <circle cx="-15.6" cy="-36.8"r="0.8" />
         </g>
+
         <!-- 指针装饰 -->
         <g class="mark">
           <circle cx="0" cy="-43" r="4" />
