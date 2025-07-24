@@ -30,7 +30,7 @@ body {
   overflow: hidden;
 }
 
-/* ---------- 订单号输入框（恢复老版样式） ---------- */
+/* ---------- 订单号输入区（老版样式） ---------- */
 .order-box {
   text-align: center;
   margin-bottom: 16px;
@@ -38,7 +38,7 @@ body {
 .order-box input {
   width: 60%;
   max-width: 400px;
-  padding: 8px;
+  padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
@@ -47,6 +47,20 @@ body {
 .order-box input:focus {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0,123,255,0.5);
+}
+.order-box .start-btn {
+  margin-left: 8px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+.order-box .start-btn:disabled {
+  background-color: #bbb;
+  cursor: not-allowed;
 }
 
 /* ---------- 转盘主体大小 ---------- */
