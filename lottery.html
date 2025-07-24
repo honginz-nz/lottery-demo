@@ -5,22 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>订单抽奖大转盘</title>
 
-  <!-- 样式 -->
+  <!-- 引入样式 -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Vue 2.x -->
+  <!-- 引入 Vue （2.x） -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script>
 </head>
 <body>
   <div id="app" class="container">
-    <!-- 订单号输入框 -->
+    <!-- 订单号输入区 -->
     <div class="order-box">
       <input
         v-model="orderInput"
-        type="text"
-        maxlength="9"
         placeholder="输入订单号"
+        maxlength="9"
       />
+      <button
+        class="start-btn"
+        @click="startDraw"
+        :disabled="isSpinning"
+      >开始抽奖</button>
     </div>
 
     <!-- 转盘 -->
@@ -30,7 +34,7 @@
           <li
             v-for="(prize, index) in prizeList"
             :key="index"
-            :style="{ transform: 'rotate(' + index * seg + 'deg)' }"
+            :style="{ transform: 'rotate(' + index * (360 / prizeList.length) + 'deg)' }"
           >
             <img :src="prize.img" :alt="prize.name" />
             <div class="prize-name" v-html="prize.name"></div>
@@ -38,7 +42,7 @@
         </ul>
       </div>
 
-      <!-- 中心 GO 按钮（只在转动时禁用） -->
+      <!-- 中心 GO 按钮 -->
       <button
         type="button"
         class="turntable_btn"
@@ -79,7 +83,7 @@
           <circle cx="36.8" cy="15.6"  r="0.8" />
           <circle cx="28.5" cy="28"    r="0.8" />
           <circle cx="15.6" cy="36.8"  r="0.8" />
-          <circle cx="0"    cy="40"    r="0.8" />
+          <circle cx="0"   cy="40"     r="0.8" />
           <circle cx="-15.6" cy="36.8" r="0.8" />
           <circle cx="-28.5" cy="28"   r="0.8" />
           <circle cx="-36.8" cy="15.6" r="0.8" />
@@ -97,6 +101,7 @@
     </section>
   </div>
 
+  <!-- 业务逻辑 -->
   <script src="app.js"></script>
 </body>
 </html>
