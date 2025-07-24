@@ -4,7 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>订单抽奖大转盘</title>
+
+  <!-- 样式 -->
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Vue 2.x -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script>
 </head>
 <body>
@@ -15,17 +19,18 @@
         v-model="orderInput"
         type="text"
         maxlength="9"
-        placeholder="请输入9位数字订单号"
+        placeholder="输入订单号"
       />
     </div>
 
+    <!-- 转盘 -->
     <section class="turntable">
       <div class="list">
         <ul :style="{ transform: `rotate(${currentRotation}deg)` }">
           <li
             v-for="(prize, index) in prizeList"
             :key="index"
-            :style="{ transform: 'rotate(' + index * (360 / prizeList.length) + 'deg)' }"
+            :style="{ transform: 'rotate(' + index * seg + 'deg)' }"
           >
             <img :src="prize.img" :alt="prize.name" />
             <div class="prize-name" v-html="prize.name"></div>
@@ -33,15 +38,19 @@
         </ul>
       </div>
 
+      <!-- 中心 GO 按钮（只在转动时禁用） -->
       <button
+        type="button"
         class="turntable_btn"
         @click="startDraw"
-        :disabled="isSpinning || (orderInput && !isOrderValid)"
+        :disabled="isSpinning"
       >GO</button>
 
+      <!-- 指针 + 圆环 -->
       <svg viewBox="-50 -50 100 100">
-        <!-- （指针与圆环部分同前，无需改动） -->
-        <g class="bottom"><ellipse cx="0" cy="40" rx="30" ry="4" /></g>
+        <g class="bottom">
+          <ellipse cx="0" cy="40" rx="30" ry="4" />
+        </g>
         <g class="polyline" :style="{ transform: `rotate(${currentRotation}deg)` }">
           <polyline points="-16,-38 16,-38 0,0" />
           <polyline points="16,-38 38,-16 0,0" />
@@ -62,7 +71,6 @@
               : 'none'
           }"
         >
-          <!-- 16 个小圆点 -->
           <circle cx="0"   cy="-40" r="0.8" />
           <circle cx="15.6" cy="-36.8" r="0.8" />
           <circle cx="28.5" cy="-28"   r="0.8" />
@@ -71,7 +79,7 @@
           <circle cx="36.8" cy="15.6"  r="0.8" />
           <circle cx="28.5" cy="28"    r="0.8" />
           <circle cx="15.6" cy="36.8"  r="0.8" />
-          <circle cx="0"   cy="40"     r="0.8" />
+          <circle cx="0"    cy="40"    r="0.8" />
           <circle cx="-15.6" cy="36.8" r="0.8" />
           <circle cx="-28.5" cy="28"   r="0.8" />
           <circle cx="-36.8" cy="15.6" r="0.8" />
@@ -88,6 +96,7 @@
       </svg>
     </section>
   </div>
+
   <script src="app.js"></script>
 </body>
 </html>
