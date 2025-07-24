@@ -13,16 +13,16 @@
 </head>
 <body>
   <div id="app" class="container">
-    <section class="turntable">
-      <!-- 1. 订单号输入框 -->
-      <div class="order-entry">
-        <input
-          type="text"
-          v-model="orderNumber"
-          placeholder="请输入订单号"
-        />
-      </div>
+    <!-- 1. 订单号输入框：移出 section.turntable，避免挤压 -->
+    <div class="order-entry">
+      <input
+        type="text"
+        v-model="orderNumber"
+        placeholder="请输入订单号（如 ORDER10001）"
+      />
+    </div>
 
+    <section class="turntable">
       <!-- 2. 奖项列表 -->
       <div class="list">
         <ul :style="{ transform: `rotate(${currentRotation}deg)` }">
@@ -70,6 +70,7 @@
               : 'none'
           }"
         >
+          <!-- 16 个小圆点 -->
           <circle cx="0"   cy="-40" r="0.8" />
           <circle cx="15.6" cy="-36.8" r="0.8" />
           <circle cx="28.5" cy="-28"   r="0.8" />
