@@ -193,9 +193,9 @@ section.turntable svg g.circle circle:nth-child(odd)  { animation: shiny 1s line
 section.turntable svg g.circle circle:nth-child(even) { animation: shiny 1s 0.5s linear infinite; }
 
 /* 指针装饰 */
-section.turntable svg g.mark circle            { fill: ##fe4e2c; }
+section.turntable svg g.mark circle            { fill: #fe4e2c; }
 section.turntable svg g.mark circle.round      { fill: none; stroke: #ffebc2; }
-section.turntable svg g.mark polyline          { fill: ##fe4e2c; }
+section.turntable svg g.mark polyline          { fill: #fe4e2c; }
 
 /* 底座阴影 */
 section.turntable svg g.bottom { fill: rgba(0,0,0,0.4); }
