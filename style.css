@@ -38,7 +38,7 @@ body {
 /* —— 新增：输入区域 —— */
 .input-area {
   text-align: center;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 .input-area input {
   width: 300px;
@@ -71,13 +71,16 @@ section.turntable {
   /* 缩小 10% */
   transform: scale(0.9);
   transform-origin: center center;
+
+  /* 向上移动整个转盘，值可以根据需要微调 */
+  margin-top: -30px;
 }
 
 
 /* 奖项列表容器 */
 section.turntable .list {
   position: absolute;
-  left: 50%; top: 40%;
+  left: 50%; top: 50%;
   width: 70%;  height: 70%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
