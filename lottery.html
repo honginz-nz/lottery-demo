@@ -14,6 +14,16 @@
 <body>
   <div id="app" class="container">
     <section class="turntable">
+      <!-- 1. 订单号输入框 -->
+      <div class="order-entry">
+        <input
+          type="text"
+          v-model="orderNumber"
+          placeholder="请输入订单号"
+        />
+      </div>
+
+      <!-- 2. 奖项列表 -->
       <div class="list">
         <ul :style="{ transform: `rotate(${currentRotation}deg)` }">
           <li
@@ -22,13 +32,12 @@
             :style="{ transform: 'rotate(' + index * (360 / prizeList.length) + 'deg)' }"
           >
             <img :src="prize.img" :alt="prize.name" />
-            <!-- v-html 渲染 <br/> 实现换行 -->
             <div class="prize-name" v-html="prize.name"></div>
           </li>
         </ul>
       </div>
 
-      <!-- 中心按钮 -->
+      <!-- 3. 中心 GO 按钮 -->
       <button
         type="button"
         class="turntable_btn"
@@ -36,7 +45,7 @@
         :disabled="isSpinning"
       >GO</button>
 
-      <!-- 指针 + 圆环 -->
+      <!-- 4. 指针 & 圆环 -->
       <svg viewBox="-50 -50 100 100">
         <g class="bottom">
           <ellipse cx="0" cy="40" rx="30" ry="4" />
@@ -61,7 +70,6 @@
               : 'none'
           }"
         >
-          <!-- 16 个小圆点 -->
           <circle cx="0"   cy="-40" r="0.8" />
           <circle cx="15.6" cy="-36.8" r="0.8" />
           <circle cx="28.5" cy="-28"   r="0.8" />
