@@ -1,7 +1,6 @@
 {
   "orderPrizeMap": {
     "ORDER10001": 2,
-    "ORDER10002": 4
-  },
-  "defaultPrizeIndex": 0
+    "ORDER10002": 5
+  }
 }
