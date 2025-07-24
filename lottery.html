@@ -22,7 +22,7 @@
             :style="{ transform: 'rotate(' + index * (360 / prizeList.length) + 'deg)' }"
           >
             <img :src="prize.img" :alt="prize.name" />
-            <!-- 关键：用 v-html 渲染 <br/> 换行 -->
+            <!-- v-html 渲染 <br/> 实现换行 -->
             <div class="prize-name" v-html="prize.name"></div>
           </li>
         </ul>
@@ -36,7 +36,7 @@
         :disabled="isSpinning"
       >GO</button>
 
-      <!-- 指针 -->
+      <!-- 指针 + 圆环 -->
       <svg viewBox="-50 -50 100 100">
         <g class="bottom">
           <ellipse cx="0" cy="40" rx="30" ry="4" />
@@ -61,22 +61,23 @@
               : 'none'
           }"
         >
-          <circle cx="0" cy="-40" r="0.8" />
+          <!-- 16 个小圆点 -->
+          <circle cx="0"   cy="-40" r="0.8" />
           <circle cx="15.6" cy="-36.8" r="0.8" />
-          <circle cx="28.5" cy="-28" r="0.8" />
+          <circle cx="28.5" cy="-28"   r="0.8" />
           <circle cx="36.8" cy="-15.6" r="0.8" />
-          <circle cx="40" cy="0" r="0.8" />
-          <circle cx="36.8" cy="15.6" r="0.8" />
-          <circle cx="28.5" cy="28" r="0.8" />
-          <circle cx="15.6" cy="36.8" r="0.8" />
-          <circle cx="0" cy="40" r="0.8" />
-          <circle cx="-36.8" cy="15.6" r="0.8" />
-          <circle cx="-28.5" cy="28" r="0.8" />
+          <circle cx="40"   cy="0"     r="0.8" />
+          <circle cx="36.8" cy="15.6"  r="0.8" />
+          <circle cx="28.5" cy="28"    r="0.8" />
+          <circle cx="15.6" cy="36.8"  r="0.8" />
+          <circle cx="0"   cy="40"     r="0.8" />
           <circle cx="-15.6" cy="36.8" r="0.8" />
-          <circle cx="-40" cy="0" r="0.8" />
-          <circle cx="-36.8" cy="-15.6" r="0.8" />
-          <circle cx="-28.5" cy="-28" r="0.8" />
-          <circle cx="-15.6" cy="-36.8" r="0.8" />
+          <circle cx="-28.5" cy="28"   r="0.8" />
+          <circle cx="-36.8" cy="15.6" r="0.8" />
+          <circle cx="-40"   cy="0"    r="0.8" />
+          <circle cx="-36.8" cy="-15.6"r="0.8" />
+          <circle cx="-28.5" cy="-28"  r="0.8" />
+          <circle cx="-15.6" cy="-36.8"r="0.8" />
         </g>
         <g class="mark">
           <circle cx="0" cy="-43" r="4" />
@@ -87,7 +88,7 @@
     </section>
   </div>
 
-  <!-- 业务逻辑：加载 orders.json，抽奖计算 -->
+  <!-- 业务逻辑 -->
   <script src="app.js"></script>
 </body>
 </html>
