@@ -6,15 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>订单抽奖大转盘</title>
 
-  <!-- 样式 -->
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Vue 2.x -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script>
 </head>
 <body>
   <div id="app" class="container">
-    <!-- —— 独立输入区，不影响转盘 —— -->
+    <!-- —— 输入区 —— -->
     <div class="input-area">
       <input
         v-model="orderInput"
@@ -24,6 +21,7 @@
       <button @click="startDraw" :disabled="isSpinning">开始抽奖</button>
     </div>
 
+    <!-- —— 转盘 —— -->
     <section class="turntable">
       <div class="list">
         <ul :style="{ transform: `rotate(${currentRotation}deg)` }">
@@ -38,22 +36,17 @@
         </ul>
       </div>
 
-      <!-- 大中心 GO 按钮 -->
-      <button
-        class="turntable_btn"
-        :disabled="isSpinning"
-      >GO</button>
+      <!-- 中心 GO 按钮 -->
+      <button class="turntable_btn" :disabled="isSpinning">GO</button>
 
-      <!-- 指针 + 扇区分隔线 + 外圈圆点 + 底座 -->
+      <!-- SVG 图层 -->
       <svg viewBox="-50 -50 100 100">
-        <!-- 1. 渐变定义 -->
+        <!-- 1. 定义径向渐变 -->
         <defs>
           <radialGradient id="outer-gradient"
                           cx="50%" cy="50%" r="50%"
                           gradientUnits="userSpaceOnUse">
-            <!-- 中心深色 -->
             <stop offset="0%"   stop-color="#fe9a24"/>
-            <!-- 边缘浅色 -->
             <stop offset="100%" stop-color="#ffe089"/>
           </radialGradient>
         </defs>
@@ -75,22 +68,20 @@
           <polyline points="-16,-38 -38,-16 0,0" />
         </g>
 
-        <!-- 中心圆环 -->
+        <!-- 中心圆环（纯色描边） -->
         <circle cx="0" cy="0" r="40" />
 
-        <!-- 外框圆环（使用径向渐变描边） -->
+        <!-- 外框圆环（径向渐变描边） -->
         <circle class="outer-ring" cx="0" cy="0" r="48" />
 
         <!-- 外圈 16 个小圆点 -->
-        <g
-          class="circle"
-          :style="{
-            transform: 'rotate(' + currentRotation + 'deg)',
-            transition: isSpinning
-              ? 'transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1)'
-              : 'none'
-          }"
-        >
+        <g class="circle"
+           :style="{
+             transform: 'rotate(' + currentRotation + 'deg)',
+             transition: isSpinning
+               ? 'transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1)'
+               : 'none'
+           }">
           <circle cx="0"   cy="-40" r="0.8" />
           <circle cx="15.6" cy="-36.8" r="0.8" />
           <circle cx="28.5" cy="-28"   r="0.8" />
@@ -119,7 +110,6 @@
     </section>
   </div>
 
-  <!-- 业务逻辑 -->
   <script src="app.js"></script>
 </body>
 </html>
