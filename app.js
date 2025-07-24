@@ -4,8 +4,8 @@ new Vue({
     return {
       prizeList: [
         {
-          name: "免单",
-          img: 'images/free.png"
+          name: "專屬優惠",
+          img: "https://cdn-icons-png.flaticon.com/512/1405/1405225.png"
         },
         {
           name: "變形金剛",
