@@ -68,7 +68,11 @@ section.turntable {
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
+  /* 缩小 10% */
+  transform: scale(0.9);
+  transform-origin: center center;
 }
+
 
 /* 奖项列表容器 */
 section.turntable .list {
