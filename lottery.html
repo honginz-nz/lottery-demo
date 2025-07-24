@@ -38,7 +38,7 @@
         <!-- 1. 径向渐变定义 -->
         <defs>
           <radialGradient id="outer-gradient" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#fe9a24"/>
+            <stop offset="0%"   stop-color="#fe9a24"/>
             <stop offset="100%" stop-color="#ffe089"/>
           </radialGradient>
         </defs>
@@ -63,7 +63,7 @@
         <!-- 中心圆环（纯色描边） -->
         <circle cx="0" cy="0" r="40"/>
 
-        <!-- 外框圆环（径向渐变描边） -->
+        <!-- 外框圆环（径向渐变描边，且缩小以防溢出） -->
         <circle class="outer-ring" cx="0" cy="0" r="48"/>
 
         <!-- 外圈 16 个小圆点 -->
@@ -76,20 +76,20 @@
            }">
           <circle cx="0" cy="-40" r="0.8"/>
           <circle cx="15.6" cy="-36.8" r="0.8"/>
-          <circle cx="28.5" cy="-28" r="0.8"/>
+          <circle cx="28.5" cy="-28"   r="0.8"/>
           <circle cx="36.8" cy="-15.6" r="0.8"/>
-          <circle cx="40" cy="0" r="0.8"/>
-          <circle cx="36.8" cy="15.6" r="0.8"/>
-          <circle cx="28.5" cy="28" r="0.8"/>
-          <circle cx="15.6" cy="36.8" r="0.8"/>
-          <circle cx="0" cy="40" r="0.8"/>
+          <circle cx="40"   cy="0"     r="0.8"/>
+          <circle cx="36.8" cy="15.6"  r="0.8"/>
+          <circle cx="28.5" cy="28"    r="0.8"/>
+          <circle cx="15.6" cy="36.8"  r="0.8"/>
+          <circle cx="0"   cy="40"     r="0.8"/>
           <circle cx="-15.6" cy="36.8" r="0.8"/>
-          <circle cx="-28.5" cy="28" r="0.8"/>
+          <circle cx="-28.5" cy="28"   r="0.8"/>
           <circle cx="-36.8" cy="15.6" r="0.8"/>
-          <circle cx="-40" cy="0" r="0.8"/>
-          <circle cx="-36.8" cy="-15.6" r="0.8"/>
-          <circle cx="-28.5" cy="-28" r="0.8"/>
-          <circle cx="-15.6" cy="-36.8" r="0.8"/>
+          <circle cx="-40"   cy="0"    r="0.8"/>
+          <circle cx="-36.8" cy="-15.6"r="0.8"/>
+          <circle cx="-28.5" cy="-28"  r="0.8"/>
+          <circle cx="-15.6" cy="-36.8"r="0.8"/>
         </g>
 
         <!-- 指针装饰 -->
