@@ -38,7 +38,7 @@ body {
 /* —— 新增：输入区域 —— */
 .input-area {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 8px;
 }
 .input-area input {
   width: 300px;
