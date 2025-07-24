@@ -4,43 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>订单抽奖大转盘</title>
-  <!-- Vue & 样式 -->
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+
+  <!-- 引入样式 -->
   <link rel="stylesheet" href="style.css" />
+
+  <!-- 引入 Vue （2.x） -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script>
 </head>
 <body>
   <div id="app" class="container">
     <section class="turntable">
-      <!-- 奖项列表 -->
       <div class="list">
         <ul :style="{ transform: `rotate(${currentRotation}deg)` }">
-          <li 
-            v-for="(prize, index) in prizeList" 
+          <li
+            v-for="(prize, index) in prizeList"
             :key="index"
             :style="{ transform: 'rotate(' + index * (360 / prizeList.length) + 'deg)' }"
           >
             <img :src="prize.img" :alt="prize.name" />
-            <div class="prize-name">{{ prize.name }}</div>
+            <!-- 关键：用 v-html 渲染 <br/> 换行 -->
+            <div class="prize-name" v-html="prize.name"></div>
           </li>
         </ul>
       </div>
+
       <!-- 中心按钮 -->
-      <button 
-        class="turntable_btn" 
-        @click="startDraw" 
+      <button
+        type="button"
+        class="turntable_btn"
+        @click="startDraw"
         :disabled="isSpinning"
       >GO</button>
-      <!-- SVG 装饰＆箭头 -->
+
+      <!-- 指针 -->
       <svg viewBox="-50 -50 100 100">
-        <!-- 底座阴影 -->
         <g class="bottom">
           <ellipse cx="0" cy="40" rx="30" ry="4" />
         </g>
-        <!-- 扇区底色 -->
-        <g 
-          class="polyline" 
-          :style="{ transform: `rotate(${currentRotation}deg)` }"
-        >
+        <g class="polyline" :style="{ transform: `rotate(${currentRotation}deg)` }">
           <polyline points="-16,-38 16,-38 0,0" />
           <polyline points="16,-38 38,-16 0,0" />
           <polyline points="38,-16 38,16 0,0" />
@@ -50,28 +51,33 @@
           <polyline points="-38,-16 -38,16 0,0" />
           <polyline points="-16,-38 -38,-16 0,0" />
         </g>
-        <!-- 外框 -->
         <circle cx="0" cy="0" r="40" />
-        <!-- —— 下面这个 group 一定要放进来 —— -->
-        <g class="circle">
-          <circle cx="0"   cy="-40" r="0.8" />
+        <g
+          class="circle"
+          :style="{
+            transform: 'rotate(' + currentRotation + 'deg)',
+            transition: isSpinning
+              ? 'transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1)'
+              : 'none'
+          }"
+        >
+          <circle cx="0" cy="-40" r="0.8" />
           <circle cx="15.6" cy="-36.8" r="0.8" />
-          <circle cx="28.5" cy="-28"   r="0.8" />
+          <circle cx="28.5" cy="-28" r="0.8" />
           <circle cx="36.8" cy="-15.6" r="0.8" />
-          <circle cx="40"   cy="0"     r="0.8" />
-          <circle cx="36.8" cy="15.6"  r="0.8" />
-          <circle cx="28.5" cy="28"    r="0.8" />
-          <circle cx="15.6" cy="36.8"  r="0.8" />
-          <circle cx="0"    cy="40"    r="0.8" />
-          <circle cx="-15.6"cy="36.8"  r="0.8" />
-          <circle cx="-28.5"cy="28"    r="0.8" />
-          <circle cx="-36.8"cy="15.6"  r="0.8" />
-          <circle cx="-40"  cy="0"     r="0.8" />
-          <circle cx="-36.8"cy="-15.6" r="0.8" />
-          <circle cx="-28.5"cy="-28"   r="0.8" />
-          <circle cx="-15.6"cy="-36.8" r="0.8" />
+          <circle cx="40" cy="0" r="0.8" />
+          <circle cx="36.8" cy="15.6" r="0.8" />
+          <circle cx="28.5" cy="28" r="0.8" />
+          <circle cx="15.6" cy="36.8" r="0.8" />
+          <circle cx="0" cy="40" r="0.8" />
+          <circle cx="-36.8" cy="15.6" r="0.8" />
+          <circle cx="-28.5" cy="28" r="0.8" />
+          <circle cx="-15.6" cy="36.8" r="0.8" />
+          <circle cx="-40" cy="0" r="0.8" />
+          <circle cx="-36.8" cy="-15.6" r="0.8" />
+          <circle cx="-28.5" cy="-28" r="0.8" />
+          <circle cx="-15.6" cy="-36.8" r="0.8" />
         </g>
-        <!-- 指针 -->
         <g class="mark">
           <circle cx="0" cy="-43" r="4" />
           <polyline points="-3.5,-41 3.5,-41 0,-35" />
@@ -80,7 +86,8 @@
       </svg>
     </section>
   </div>
-  <!-- 业务逻辑 -->
+
+  <!-- 业务逻辑：加载 orders.json，抽奖计算 -->
   <script src="app.js"></script>
 </body>
 </html>
