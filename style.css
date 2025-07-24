@@ -52,7 +52,7 @@ body {
   margin-left: 8px;
   font-size: 1rem;
   border: none;
-  background-color: #007bff;
+  background-color: #e62919;
   color: #fff;
   border-radius: 4px;
   cursor: pointer;
@@ -142,7 +142,7 @@ section.turntable .turntable_btn {
   border: none;
   border-radius: 50%;
   background-color: #ffb929;
-  color: #0080C0;
+  color: #ea3325;
   font-size: 6rem;
   font-weight: 900;
   cursor: pointer;
@@ -167,7 +167,7 @@ section.turntable .turntable_btn::after {
 /* SVG 外框圆环 */
 section.turntable svg > circle {
   fill: none;
-  stroke: #006fa7;
+  stroke: #ffe089;
   stroke-width: 5px;
 }
 
@@ -177,8 +177,8 @@ section.turntable svg g.polyline {
   transform-origin: center;
   transition: transform 4.5s cubic-bezier(0.25,0.1,0.25,1);
 }
-section.turntable svg g.polyline polyline:nth-child(odd)  { fill: #0080C0; }
-section.turntable svg g.polyline polyline:nth-child(even) { fill: #00a2f3; }
+section.turntable svg g.polyline polyline:nth-child(odd)  { fill: #fdd1c2; }
+section.turntable svg g.polyline polyline:nth-child(even) { fill: #fffdfe; }
 
 /* 外圈 16 个闪烁小圆点 */
 section.turntable svg g.circle {
@@ -193,9 +193,9 @@ section.turntable svg g.circle circle:nth-child(odd)  { animation: shiny 1s line
 section.turntable svg g.circle circle:nth-child(even) { animation: shiny 1s 0.5s linear infinite; }
 
 /* 指针装饰 */
-section.turntable svg g.mark circle            { fill: #FFB10F; }
+section.turntable svg g.mark circle            { fill: ##fe4e2c; }
 section.turntable svg g.mark circle.round      { fill: none; stroke: #ffebc2; }
-section.turntable svg g.mark polyline          { fill: #FFB10F; }
+section.turntable svg g.mark polyline          { fill: ##fe4e2c; }
 
 /* 底座阴影 */
 section.turntable svg g.bottom { fill: rgba(0,0,0,0.4); }
