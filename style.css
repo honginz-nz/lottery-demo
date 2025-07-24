@@ -35,7 +35,7 @@ body {
   overflow: hidden;
 }
 
-/* —— 输入区域 —— */
+/* —— 新增：输入区域 —— */
 .input-area {
   text-align: center;
   margin-bottom: 10px;
@@ -71,17 +71,17 @@ section.turntable {
   /* 缩小 10% */
   transform: scale(0.9);
   transform-origin: center center;
+
   /* 向上移动整个转盘，值可以根据需要微调 */
   margin-top: -50px;
 }
 
+
 /* 奖项列表容器 */
 section.turntable .list {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 70%;
-  height: 70%;
+  left: 50%; top: 50%;
+  width: 70%;  height: 70%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   overflow: hidden;
@@ -91,8 +91,7 @@ section.turntable .list {
 /* 扇区列表 */
 section.turntable .list ul {
   list-style: none;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   transform-origin: center center;
   transition: transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
@@ -100,8 +99,7 @@ section.turntable .list ul {
 /* 单个扇区 */
 section.turntable .list ul li {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -124,7 +122,7 @@ section.turntable .list ul li img {
   margin-top: 5px;
 }
 
-/* 奖品名称 */
+/* 奖品文字 */
 .prize-name {
   margin-top: 10px;
   white-space: normal;
@@ -138,11 +136,9 @@ section.turntable .list ul li img {
 /* 中心 GO 按钮 */
 section.turntable .turntable_btn {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 50%; top: 50%;
   transform: translate(-50%, -50%);
-  width: 30%;
-  height: 30%;
+  width: 30%; height: 30%;
   border: none;
   border-radius: 50%;
   background-color: #ffb929;
@@ -159,18 +155,16 @@ section.turntable .turntable_btn:disabled {
 section.turntable .turntable_btn::after {
   content: "";
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 50%; top: 50%;
   transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
+  width: 80%; height: 80%;
   background-color: #ffe3a8;
   border-radius: 50%;
   box-shadow: 1px 2px 4px rgba(0,0,0,0.3);
   z-index: -1;
 }
 
-/* SVG 外框圆环：使用径向渐变描边 */
+/* SVG 外框圆环 */
 section.turntable svg > circle {
   fill: none;
   stroke: url(#outer-gradient);
@@ -205,11 +199,6 @@ section.turntable svg g.mark polyline          { fill: #fe4e2c; }
 
 /* 底座阴影 */
 section.turntable svg g.bottom { fill: rgba(0,0,0,0.4); }
-
-/* 强制满高，保证垂直布局 */
-html, body, #app {
-  height: 100%;
-}
 
 /* 响应式 */
 @media (max-width: 767px) {
