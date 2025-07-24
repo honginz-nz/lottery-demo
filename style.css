@@ -73,7 +73,7 @@ section.turntable {
   transform-origin: center center;
 
   /* 向上移动整个转盘，值可以根据需要微调 */
-  margin-top: -30px;
+  margin-top: -50px;
 }
 
 
