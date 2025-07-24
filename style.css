@@ -1,4 +1,3 @@
-/* style.css */
 @charset "UTF-8";
 
 /* 闪烁动画 */
@@ -17,12 +16,7 @@
 
 body {
   /* 背景：45度渐变，两端 #f33318，中间 #ffa03c */
-  background: linear-gradient(
-    45deg,
-    #f33318 0%,
-    #ffa03c 50%,
-    #f33318 100%
-  );
+  background: linear-gradient(45deg, #f33318 0%, #ffa03c 50%, #f33318 100%);
   font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
 
@@ -63,24 +57,24 @@ body {
   cursor: not-allowed;
 }
 
-/* 转盘主体，保持满宽度 */
+/* 转盘主体 */
 section.turntable {
   position: relative;
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
-  /* 缩小 10% */
   transform: scale(0.9);
   transform-origin: center center;
-  /* 向上移动整个转盘，值可以根据需要微调 */
   margin-top: -50px;
 }
 
 /* 奖项列表容器 */
 section.turntable .list {
   position: absolute;
-  left: 50%; top: 50%;
-  width: 70%;  height: 70%;
+  left: 50%;
+  top: 50%;
+  width: 70%;
+  height: 70%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   overflow: hidden;
@@ -90,7 +84,8 @@ section.turntable .list {
 /* 扇区列表 */
 section.turntable .list ul {
   list-style: none;
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   transform-origin: center center;
   transition: transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
@@ -98,7 +93,8 @@ section.turntable .list ul {
 /* 单个扇区 */
 section.turntable .list ul li {
   position: absolute;
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -135,9 +131,11 @@ section.turntable .list ul li img {
 /* 中心 GO 按钮 */
 section.turntable .turntable_btn {
   position: absolute;
-  left: 50%; top: 50%;
+  left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
-  width: 30%; height: 30%;
+  width: 30%;
+  height: 30%;
   border: none;
   border-radius: 50%;
   background-color: #ffb929;
@@ -154,22 +152,26 @@ section.turntable .turntable_btn:disabled {
 section.turntable .turntable_btn::after {
   content: "";
   position: absolute;
-  left: 50%; top: 50%;
+  left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
-  width: 80%; height: 80%;
+  width: 80%;
+  height: 80%;
   background-color: #ffe3a8;
   border-radius: 50%;
   box-shadow: 1px 2px 4px rgba(0,0,0,0.3);
   z-index: -1;
 }
 
-/* SVG 外框圆环 */
-section.turntable svg circle:not(.outer-ring) {
+/* SVG 圆环描边分层 */
+/* 仅对 SVG 的直接子 circle（中心圈）纯色描边 */
+section.turntable svg > circle:not(.outer-ring) {
   fill: none;
   stroke: #ffe089;
   stroke-width: 5px;
 }
-section.turntable svg circle.outer-ring {
+/* 仅对 SVG 的直接子 circle.outer-ring（外框圈）渐变描边 */
+section.turntable svg > circle.outer-ring {
   fill: none;
   stroke: url(#outer-gradient);
   stroke-width: 5px;
