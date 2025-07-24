@@ -64,69 +64,43 @@ body {
   cursor: not-allowed;
 }
 
-/* ---------- 转盘主体：保持正方形 & 自适应 ---------- */
+/* —— 转盘主体，保持满宽度 —— */
 section.turntable {
   position: relative;
   width: 100%;
-  max-width: 700px;
+  max-width: 1000px;
   margin: 0 auto;
-  /* 强制 1:1 比例 */
+  /* 强制正方形展示 */
   aspect-ratio: 1 / 1;
 }
 
-/* ---------- 奖项列表容器 ---------- */
+/* —— 奖项列表容器：内圈占比调小 —— */
 section.turntable .list {
   position: absolute;
   left: 50%; top: 50%;
-  width: 80%;   /* 扇区盘面占比 */
-  height: 80%;
+  width: 65%;   /* 从 70% 缩到 65% */
+  height: 65%;  /* 从 70% 缩到 65% */
   transform: translate(-50%, -50%);
   border-radius: 50%;
   overflow: hidden;
   text-align: center;
 }
 
-/* ---------- 扇区列表 ---------- */
-section.turntable .list ul {
-  list-style: none;
-  width: 100%; height: 100%;
-  transform-origin: center center;
-  transition: transform 4.5s cubic-bezier(0.25,0.1,0.25,1);
-}
-
-/* ---------- 单个扇区 ---------- */
-section.turntable .list ul li {
-  position: absolute;
-  width: 100%; height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-/* 8 项示例：扇区角度 */
-section.turntable .list ul li:nth-child(1) { transform: rotate(0deg);   }
-section.turntable .list ul li:nth-child(2) { transform: rotate(45deg);  }
-section.turntable .list ul li:nth-child(3) { transform: rotate(90deg);  }
-section.turntable .list ul li:nth-child(4) { transform: rotate(135deg); }
-section.turntable .list ul li:nth-child(5) { transform: rotate(180deg); }
-section.turntable .list ul li:nth-child(6) { transform: rotate(225deg); }
-section.turntable .list ul li:nth-child(7) { transform: rotate(270deg); }
-section.turntable .list ul li:nth-child(8) { transform: rotate(315deg); }
-
-/* ---------- 奖品图标：响应式 & 限制最大值 ---------- */
+/* —— 奖品图标：向内圈移动 —— */
 section.turntable .list ul li img {
+  /* 保留之前的响应式限制，这里不改 */
   width: clamp(50px, 12%, 80px);
-  margin-top: 4%;
+  /* 原先是 margin-top:4%; 现在调小一点，图标靠近中心 */
+  margin-top: 2%;
 }
 
-/* ---------- 奖品文字 ---------- */
+/* —— 奖品文字：向内圈移动 —— */
 .prize-name {
-  margin-top: 4%;
+  /* 原先是 margin-top:4% 或 8px；这里调小，让文字也靠内 */
+  margin-top: 2%;
   white-space: normal;
   word-break: break-word;
   line-height: 1.2;
-  /* 根据容器大小自适应，限制最大 & 最小字号 */
   font-size: clamp(0.8rem, 1.2vw, 1.2rem);
   color: #fff;
   text-align: center;
