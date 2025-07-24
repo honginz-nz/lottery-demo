@@ -1,15 +1,9 @@
 @charset "UTF-8";
 
 @keyframes shiny {
-  0% {
-    fill: white;
-  }
-  50% {
-    fill: #ffc242;
-  }
-  100% {
-    fill: white;
-  }
+  0% { fill: white; }
+  50% { fill: #ffc242; }
+  100% { fill: white; }
 }
 
 * {
@@ -19,7 +13,7 @@
 }
 
 body {
-  background-color: #3dbfbb;
+  background-color: #3DBFBB;
 }
 
 .container {
@@ -79,27 +73,13 @@ section.turntable div.list ul li {
   height: 100%;
 }
 
-section.turntable div.list ul li:nth-child(2) {
-  transform: rotate(315deg);
-}
-section.turntable div.list ul li:nth-child(3) {
-  transform: rotate(270deg);
-}
-section.turntable div.list ul li:nth-child(4) {
-  transform: rotate(225deg);
-}
-section.turntable div.list ul li:nth-child(5) {
-  transform: rotate(180deg);
-}
-section.turntable div.list ul li:nth-child(6) {
-  transform: rotate(135deg);
-}
-section.turntable div.list ul li:nth-child(7) {
-  transform: rotate(90deg);
-}
-section.turntable div.list ul li:nth-child(8) {
-  transform: rotate(45deg);
-}
+section.turntable div.list ul li:nth-child(2) { transform: rotate(315deg); }
+section.turntable div.list ul li:nth-child(3) { transform: rotate(270deg); }
+section.turntable div.list ul li:nth-child(4) { transform: rotate(225deg); }
+section.turntable div.list ul li:nth-child(5) { transform: rotate(180deg); }
+section.turntable div.list ul li:nth-child(6) { transform: rotate(135deg); }
+section.turntable div.list ul li:nth-child(7) { transform: rotate(90deg); }
+section.turntable div.list ul li:nth-child(8) { transform: rotate(45deg); }
 
 section.turntable div.list ul li img {
   width: 70px;
@@ -119,7 +99,7 @@ section.turntable button.turntable_btn {
   height: 30%;
   border-radius: 50%;
   font-size: 70px;
-  color: #0080c0;
+  color: #0080C0;
   background-color: #ffb929;
   cursor: pointer;
 }
@@ -151,14 +131,14 @@ section.turntable svg > circle {
 
 /* 這是關鍵：讓底圖 polyline 用同樣的旋轉中心和變換 */
 section.turntable svg g.polyline {
-  transform-box: fill-box; /* 讓 transform-origin 正確作用 */
+  transform-box: fill-box;  /* 讓 transform-origin 正確作用 */
   transform-origin: center; /* 旋轉中心置中 */
   transition: transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 /* polyline 顏色設定 */
 section.turntable svg g.polyline polyline {
-  fill: #0080c0;
+  fill: #0080C0;
 }
 
 section.turntable svg g.polyline polyline:nth-child(odd) {
@@ -182,7 +162,7 @@ section.turntable svg g.circle circle:nth-child(even) {
 }
 
 section.turntable svg g.mark circle {
-  fill: #ffb10f;
+  fill: #FFB10F;
 }
 
 section.turntable svg g.mark circle.round {
@@ -191,7 +171,7 @@ section.turntable svg g.mark circle.round {
 }
 
 section.turntable svg g.mark polyline {
-  fill: #ffb10f;
+  fill: #FFB10F;
   stroke: none;
 }
 
