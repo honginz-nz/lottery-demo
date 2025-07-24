@@ -6,7 +6,7 @@ new Vue({
       prizeList: [
         { name: "饮料",           img: "images/boxeddrink.png"      },
         { name: "巧克力",         img: "images/chocolate.png"       },
-        { name: "$5小程序优惠券", img: "images/coupon.png"          },
+        { name: "$5优惠券<br/>无门槛小程序可用", img: "images/coupon.png"          },
         { name: "免单",           img: "images/free.png"            },
         { name: "保健品",         img: "images/healthsupplements.png"},
         { name: "麦卢卡蜂蜜",     img: "images/honey.png"           },
