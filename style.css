@@ -167,7 +167,7 @@ section.turntable .turntable_btn::after {
 /* SVG 外框圆环 */
 section.turntable svg > circle {
   fill: none;
-  stroke: #ffe089;
+  stroke: url(#outer-gradient);
   stroke-width: 5px;
 }
 
