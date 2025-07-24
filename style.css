@@ -14,14 +14,9 @@
   box-sizing: border-box;
 }
 
+/* 背景 & 默认字体 */
 body {
-  /* 背景：45度渐变，两端 #f33318，中间 #ffa03c */
-  background: linear-gradient(
-    45deg,
-    #f33318 0%,
-    #ffa03c 50%,
-    #f33318 100%
-  );
+  background-color: #3DBFBB;
   font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
 
@@ -109,51 +104,97 @@ section.turntable .list ul li:nth-child(6) { transform: rotate(225deg); }
 section.turntable .list ul li:nth-child(7) { transform: rotate(270deg); }
 section.turntable .list ul li:nth-child(8) { transform: rotate(315deg); }
 
-/* 扇区样式 (扇形 + 边框) */
-section.turntable .list ul li svg path {
-  stroke: #fff;
-  stroke-width: 2;
-  fill: #ffecb3;
-}
-
-/* 奖品图片 */
+/* 奖品图标 */
 section.turntable .list ul li img {
-  width: 40px;
-  height: 40px;
-  margin-top: 20px;
+  width: 100px;
+  margin-top: 5px;
 }
 
 /* 奖品文字 */
-section.turntable .list ul li .text {
-  margin-top: 8px;
-  font-size: 0.9rem;
-  color: #333;
+.prize-name {
+  margin-top: 10px;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.2;
+  font-size: 1.4rem;
+  color: #fff;
   text-align: center;
 }
 
-/* 抽奖按钮 */
-section.turntable .pointer {
+/* 中心 GO 按钮 */
+section.turntable .turntable_btn {
   position: absolute;
-  top: 50%; left: 50%;
-  width: 60px; height: 60px;
-  transform: translate(-50%, -100%);
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%; height: 30%;
+  border: none;
+  border-radius: 50%;
+  background-color: #ffb929;
+  color: #0080C0;
+  font-size: 6rem;
+  font-weight: 900;
   cursor: pointer;
-  z-index: 10;
+  outline: none;
 }
-
-/* 禁用状态覆盖层 */
-section.turntable .overlay {
-  display: none;
+section.turntable .turntable_btn:disabled {
+  background-color: #bbb;
+  cursor: not-allowed;
+}
+section.turntable .turntable_btn::after {
+  content: "";
   position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.6);
-  z-index: 5;
-}
-section.turntable.spinning .overlay {
-  display: block;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%; height: 80%;
+  background-color: #ffe3a8;
+  border-radius: 50%;
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.3);
+  z-index: -1;
 }
 
-/* 弹性布局，居中 */
-html, body, #app {
-  height: 100%;
+/* SVG 外框圆环 */
+section.turntable svg > circle {
+  fill: none;
+  stroke: #006fa7;
+  stroke-width: 5px;
+}
+
+/* 扇区分隔线 */
+section.turntable svg g.polyline {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 4.5s cubic-bezier(0.25,0.1,0.25,1);
+}
+section.turntable svg g.polyline polyline:nth-child(odd)  { fill: #0080C0; }
+section.turntable svg g.polyline polyline:nth-child(even) { fill: #00a2f3; }
+
+/* 外圈 16 个闪烁小圆点 */
+section.turntable svg g.circle {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+section.turntable svg g.circle circle {
+  fill: #fff;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+}
+section.turntable svg g.circle circle:nth-child(odd)  { animation: shiny 1s linear infinite; }
+section.turntable svg g.circle circle:nth-child(even) { animation: shiny 1s 0.5s linear infinite; }
+
+/* 指针装饰 */
+section.turntable svg g.mark circle            { fill: #FFB10F; }
+section.turntable svg g.mark circle.round      { fill: none; stroke: #ffebc2; }
+section.turntable svg g.mark polyline          { fill: #FFB10F; }
+
+/* 底座阴影 */
+section.turntable svg g.bottom { fill: rgba(0,0,0,0.4); }
+
+/* 响应式 */
+@media (max-width: 767px) {
+  .prize-name { font-size: 1rem; }
+  section.turntable .list ul li img { width: 70px; }
+  section.turntable .turntable_btn      { font-size: 4rem; }
+}
+@media (max-width: 400px) {
+  section.turntable .list ul li img { display: none; }
+  .prize-name { font-size: 0.9rem; }
 }
