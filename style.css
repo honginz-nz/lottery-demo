@@ -7,10 +7,10 @@
 }
 
 * {
-  padding: 0;
   margin: 0;
-  font-family: "微軟正黑體";
+  padding: 0;
   box-sizing: border-box;
+  font-family: "微軟正黑體", sans-serif;
 }
 
 body {
@@ -22,6 +22,8 @@ body {
   min-width: 400px;
   margin: 0 auto;
   overflow: hidden;
+  position: relative;
+  padding: 20px 0;
 }
 
 section.turntable {
@@ -31,14 +33,14 @@ section.turntable {
   margin: 0 auto;
 }
 
+/* 奖项列表容器 */
 section.turntable .list {
   position: absolute;
-  left: 50%;
   top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
   transform: translate(-50%, -50%);
-  width: 70%;
-  height: 70%;
-  text-align: center;
   border-radius: 50%;
 }
 
@@ -46,21 +48,26 @@ section.turntable .list ul {
   list-style: none;
   width: 100%;
   height: 100%;
-  padding: 0;
-  margin: 0;
   transform-origin: center center;
   transition: transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  padding: 0;
+  margin: 0;
 }
 
+/* 每个扇区 */
 section.turntable .list ul li {
   position: absolute;
   width: 100%;
   height: 100%;
   color: #fff;
-  font-size: 22px;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-/* 奖项扇区旋转角度 */
+/* 扇区角度 */
 section.turntable .list ul li:nth-child(1) { transform: rotate(0deg); }
 section.turntable .list ul li:nth-child(2) { transform: rotate(45deg); }
 section.turntable .list ul li:nth-child(3) { transform: rotate(90deg); }
@@ -70,36 +77,39 @@ section.turntable .list ul li:nth-child(6) { transform: rotate(225deg); }
 section.turntable .list ul li:nth-child(7) { transform: rotate(270deg); }
 section.turntable .list ul li:nth-child(8) { transform: rotate(315deg); }
 
+/* 奖项图标 */
 section.turntable .list ul li img {
-  width: 70px;
-  margin-top: 5px;
+  width: 60px;
+  height: auto;
+  margin-top: 10px;
 }
 
 /* 中心按钮 */
 section.turntable .turntable_btn {
   position: absolute;
-  left: 50%;
   top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   width: 30%;
   height: 30%;
   border: none;
   border-radius: 50%;
+  background-color: #ffb929;
+  color: #0080C0;
   font-size: 2rem;
   font-weight: bold;
-  color: #0080C0;
-  background-color: #ffb929;
   cursor: pointer;
+  outline: none;
 }
 section.turntable .turntable_btn:disabled {
-  background: #bbb;
+  background-color: #bbb;
   cursor: not-allowed;
 }
 section.turntable .turntable_btn::after {
   content: '';
   position: absolute;
-  left: 50%;
   top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
   height: 80%;
@@ -109,14 +119,14 @@ section.turntable .turntable_btn::after {
   box-shadow: 1px 2px 4px rgba(0,0,0,0.3);
 }
 
-/* 外圈大圆边框 */
+/* SVG大圆边框 */
 section.turntable svg > circle {
   fill: none;
   stroke: #006fa7;
   stroke-width: 5px;
 }
 
-/* 扇区底图 */
+/* 扇区底色 */
 section.turntable svg g.polyline {
   transform-box: fill-box;
   transform-origin: center;
@@ -129,11 +139,15 @@ section.turntable svg g.polyline polyline:nth-child(even) {
   fill: #00a2f3;
 }
 
-/* 外圈小圆点 */
+/* 外圈装饰小圆点 */
+section.turntable svg g.circle {
+  transform-box: fill-box;
+  transform-origin: center;
+}
 section.turntable svg g.circle circle {
   fill: #fff;
   stroke: none;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
 }
 section.turntable svg g.circle circle:nth-child(odd) {
   animation: shiny 0.8s linear infinite;
@@ -146,12 +160,12 @@ section.turntable svg g.circle circle:nth-child(even) {
 section.turntable svg g.mark circle { fill: #FFB10F; }
 section.turntable svg g.mark polyline { fill: #FFB10F; }
 
-/* 阴影底座 */
+/* 底座阴影 */
 section.turntable svg g.bottom { fill: rgba(0,0,0,0.4); }
 
 /* 响应式 */
 @media (max-width: 767px) {
-  section.turntable .list ul li { font-size: 14px; }
+  section.turntable .list ul li { font-size: 16px; }
   section.turntable .list ul li img { width: 40px; }
   section.turntable .turntable_btn { font-size: 1.5rem; }
 }
