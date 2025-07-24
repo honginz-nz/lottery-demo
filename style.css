@@ -14,9 +14,14 @@
   box-sizing: border-box;
 }
 
-/* 背景 & 默认字体 */
 body {
-  background-color: #3DBFBB;
+  /* 背景：45度渐变，两端 #f33318，中间 #ffa03c */
+  background: linear-gradient(
+    45deg,
+    #f33318 0%,
+    #ffa03c 50%,
+    #f33318 100%
+  );
   font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
 
