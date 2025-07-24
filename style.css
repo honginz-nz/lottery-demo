@@ -22,6 +22,8 @@ body {
   min-width: 400px;
   margin: 0 auto;
   overflow: hidden;
+  position: relative;
+  padding: 20px 0;
 }
 
 section.turntable {
@@ -31,36 +33,41 @@ section.turntable {
   margin: 0 auto;
 }
 
+/* 奖项列表容器 */
 section.turntable .list {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 70%;
-  height: 70%;
-  text-align: center;
+  width: 70%; height: 70%;
   border-radius: 50%;
+  overflow: hidden; /* 裁剪扇区 */
 }
 
 section.turntable .list ul {
   list-style: none;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
+  width: 100%; height: 100%;
+  padding: 0; margin: 0;
   transform-origin: center center;
-  transition: transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: transform 4.5s cubic-bezier(0.25,0.1,0.25,1);
 }
 
+/* 每个扇区 */
 section.turntable .list ul li {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+  padding: 5px;
   color: #fff;
-  font-size: 22px;
+  font-size: 18px;
 }
 
-/* 奖项扇区旋转角度 */
+/* 扇区角度 */
 section.turntable .list ul li:nth-child(1) { transform: rotate(0deg); }
 section.turntable .list ul li:nth-child(2) { transform: rotate(45deg); }
 section.turntable .list ul li:nth-child(3) { transform: rotate(90deg); }
@@ -70,25 +77,24 @@ section.turntable .list ul li:nth-child(6) { transform: rotate(225deg); }
 section.turntable .list ul li:nth-child(7) { transform: rotate(270deg); }
 section.turntable .list ul li:nth-child(8) { transform: rotate(315deg); }
 
+/* 奖项图标 */
 section.turntable .list ul li img {
-  width: 70px;
+  width: 60px; height: auto;
   margin-top: 5px;
 }
 
 /* 中心按钮 */
 section.turntable .turntable_btn {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 30%;
-  height: 30%;
+  width: 30%; height: 30%;
   border: none;
   border-radius: 50%;
+  background-color: #ffb929;
+  color: #0080C0;
   font-size: 2rem;
   font-weight: bold;
-  color: #0080C0;
-  background-color: #ffb929;
   cursor: pointer;
 }
 section.turntable .turntable_btn:disabled {
@@ -98,18 +104,16 @@ section.turntable .turntable_btn:disabled {
 section.turntable .turntable_btn::after {
   content: '';
   position: absolute;
-  left: 50%;
-  top: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
+  width: 80%; height: 80%;
   background-color: #ffe3a8;
   border-radius: 50%;
   z-index: -1;
   box-shadow: 1px 2px 4px rgba(0,0,0,0.3);
 }
 
-/* 外圈大圆边框 */
+/* SVG 大圆边框 */
 section.turntable svg > circle {
   fill: none;
   stroke: #006fa7;
@@ -120,27 +124,23 @@ section.turntable svg > circle {
 section.turntable svg g.polyline {
   transform-box: fill-box;
   transform-origin: center;
-  transition: transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: transform 4.5s cubic-bezier(0.25,0.1,0.25,1);
 }
-section.turntable svg g.polyline polyline:nth-child(odd) {
-  fill: #0080C0;
-}
-section.turntable svg g.polyline polyline:nth-child(even) {
-  fill: #00a2f3;
-}
+section.turntable svg g.polyline polyline:nth-child(odd) { fill: #0080C0; }
+section.turntable svg g.polyline polyline:nth-child(even) { fill: #00a2f3; }
 
 /* 外圈小圆点 */
+section.turntable svg g.circle {
+  transform-box: fill-box;
+  transform-origin: center;
+}
 section.turntable svg g.circle circle {
   fill: #fff;
   stroke: none;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
 }
-section.turntable svg g.circle circle:nth-child(odd) {
-  animation: shiny 0.8s linear infinite;
-}
-section.turntable svg g.circle circle:nth-child(even) {
-  animation: shiny 0.8s 0.5s linear infinite;
-}
+section.turntable svg g.circle circle:nth-child(odd) { animation: shiny 1s linear infinite; }
+section.turntable svg g.circle circle:nth-child(even) { animation: shiny 1s 0.5s linear infinite; }
 
 /* 指针 */
 section.turntable svg g.mark circle { fill: #FFB10F; }
@@ -151,11 +151,10 @@ section.turntable svg g.bottom { fill: rgba(0,0,0,0.4); }
 
 /* 响应式 */
 @media (max-width: 767px) {
-  section.turntable .list ul li { font-size: 14px; }
+  section.turntable .list ul li { font-size: 16px; }
   section.turntable .list ul li img { width: 40px; }
   section.turntable .turntable_btn { font-size: 1.5rem; }
 }
-
 @media (max-width: 400px) {
   section.turntable .list ul li img { display: none; }
 }
