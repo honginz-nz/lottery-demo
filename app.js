@@ -15,11 +15,10 @@ new Vue({
       .then(r => r.json())
       .then(data => {
         this.orderPrizeMap = data.orderPrizeMap || {};
-        // 如果 JSON 里维护了 prizeList，就直接用它
         if (Array.isArray(data.prizeList)) {
           this.prizeList = data.prizeList;
         } else {
-          // 否则改成你自己的硬编码列表
+          // 回退到硬编码列表
           this.prizeList = [
             { name: "饮料",             img: "images/boxeddrink.png"      },
             { name: "巧克力",           img: "images/chocolate.png"       },
@@ -44,21 +43,25 @@ new Vue({
 
       const key = this.orderInput.trim();
       if (key && this.orderPrizeMap[key] != null) {
+        // 如果输入匹配 JSON 中指定订单 → 定中奖品索引
         winIdx = this.orderPrizeMap[key];
       } else {
-        // 排除“免单”（假设索引 3）
+        // 随机抽（排除“免单”，假设其索引是 3）
         const exclude = 3;
         const pool = this.prizeList.map((_,i) => i).filter(i => i !== exclude);
-        winIdx = pool[Math.floor(Math.random()*pool.length)];
+        winIdx = pool[Math.floor(Math.random() * pool.length)];
       }
 
-      const baseSpins = 4;
-      const targetAngle = winIdx * seg;
-      this.currentRotation += baseSpins * 360 + targetAngle;
+      // 计算旋转角度：4 圈 + 让第 winIdx 扇区对准顶部指针
+      const baseSpins    = 4 * 360;
+      // 核心修正：用 360 - winIdx*seg 使其停在正确位置
+      const targetOffset = (360 - winIdx * seg) % 360;
+      this.currentRotation += baseSpins + targetOffset;
 
+      // 动画结束后弹窗
       setTimeout(() => {
-        this.isSpinning = false;
-        this.finalPrizeName = this.prizeList[winIdx].name;
+        this.isSpinning      = false;
+        this.finalPrizeName  = this.prizeList[winIdx].name;
         alert(`恭喜获得：${this.finalPrizeName}！`);
       }, 4500);
     }
