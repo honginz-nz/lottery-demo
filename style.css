@@ -3,7 +3,7 @@
 /* 闪烁动画 */
 @keyframes shiny {
   0%   { fill: white; }
-  50%  { fill: #ffc242; }
+  50%  { fill: #f95a1d; }
   100% { fill: white; }
 }
 
