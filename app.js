@@ -32,6 +32,12 @@ new Vue({
   },
   methods: {
     startDraw() {
+      // 校验：必须是 9 位数字
+      const key = this.orderInput.trim();
+      if (!/^\d{9}$/.test(key)) {
+        alert('订单号输入有误');
+        return;
+      }
       if (this.isSpinning) return;
       this.isSpinning = true;
 
@@ -41,8 +47,7 @@ new Vue({
 
       // 决定中奖索引：优先映射订单号，否则随机（排除免单 index=3）
       let winIdx;
-      const key = this.orderInput.trim();
-      if (key && this.orderPrizeMap[key] != null) {
+      if (this.orderPrizeMap[key] != null) {
         winIdx = this.orderPrizeMap[key];
       } else {
         const pool = this.prizeList.map((_, i) => i).filter(i => i !== 3);
@@ -58,7 +63,7 @@ new Vue({
         this.isSpinning     = false;
         this.finalPrizeName = this.prizeList[winIdx].name;
 
-        // **去掉所有 <br/> 或其他标签，再提示**
+        // 去掉所有标签，再提示
         const text = this.finalPrizeName.replace(/<[^>]+>/g, '');
         alert(`恭喜获得：${text}！`);
       }, 4500);
