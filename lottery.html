@@ -45,6 +45,17 @@
 
       <!-- 指针 + 扇区分隔线 + 外圈圆点 + 底座 -->
       <svg viewBox="-50 -50 100 100">
+    
+        <!-- 新增：外框圆环径向渐变定义 -->
+        <defs>
+        <radialGradient id="outer-gradient" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse">
+        <!-- 中心（inner）深色 -->
+        <stop offset="0%" stop-color="#fe9a24"/>
+        <!-- 边缘（outer）浅色 -->
+        <stop offset="100%" stop-color="#ffe089"/>
+        </radialGradient>
+        </defs>
+
         <!-- 底座阴影 -->
         <g class="bottom">
           <ellipse cx="0" cy="40" rx="30" ry="4" />
