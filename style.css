@@ -57,7 +57,7 @@ body {
   display: flex;
   align-items: center;    /* 中心线对齐，而不是顶端对齐 */
   justify-content: center; /* 中间对齐，你也可以改成 space-between */
-  gap: 30px;               /* 控制中间间距 */
+  gap: 20px;               /* 控制中间间距 */
   margin-top: 20px;
 }
 
