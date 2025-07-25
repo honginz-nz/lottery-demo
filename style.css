@@ -17,20 +17,16 @@
 /* 背景渐变 & 字体 */
 body {
   background: linear-gradient(45deg, #f33318 0%, #ffa03c 50%, #f33318 100%);
-  font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
 }
 
-/* 容器 */
+/* 顶部输入区 */
 .container {
   max-width: 1000px;
   min-width: 400px;
   margin: 0 auto;
   padding: 20px 0;
-  position: relative;
-  overflow: hidden;
 }
-
-/* 输入区 */
 .input-area {
   text-align: center;
   margin-bottom: 10px;
@@ -56,43 +52,66 @@ body {
   background-color: #bbb;
   cursor: not-allowed;
 }
+/* —— 三栏主区 —— */
+.main-content {
+  display: flex;
+  align-items: center;    /* 中心线对齐，而不是顶端对齐 */
+  justify-content: center; /* 中间对齐，你也可以改成 space-between */
+  gap: 40px;               /* 控制中间间距 */
+  margin-top: 20px;
+}
 
-/* 转盘主体 */
+/* 左右侧“半透明框” */
+.sidebar {
+  flex: 0 0 380px;         /* 不放大、不缩小，宽度固定 380px */
+  width: 380px;            /* 保险写一遍 */
+  height: 50vh;            /* 原来是 50vh，如需更改也在这里调 */
+  background: rgba(255,255,255,0.6);
+  border-radius: 8px;
+  padding: 35px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-size: 1rem;
+  line-height: 2;
+  overflow: hidden;
+}
+
+/* 右侧滚动，最多 10 条 */
+.sidebar.right {
+  overflow-y: auto;
+}
+
+/* —— 转盘区 —— */
+/* 保持原始纵横比，不随 flex 缩放 */
 section.turntable {
   position: relative;
+  flex: 0 0 auto;
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
   transform: scale(0.9);
   transform-origin: center center;
-  margin-top: -50px;
+  margin-top: -70px;
 }
 
 /* 奖项列表 */
 section.turntable .list {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 70%;
-  height: 70%;
+  left: 50%; top: 50%;
+  width: 70%; height: 70%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   overflow: hidden;
   text-align: center;
 }
-
-/* 扇区旋转 */
 section.turntable .list ul {
   list-style: none;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   transform-origin: center center;
-  transition: transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: transform 4.5s cubic-bezier(0.25,0.1,0.25,1);
 }
 section.turntable .list ul li {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -101,91 +120,66 @@ section.turntable .list ul li {
 section.turntable .list ul li:nth-child(1)  { transform: rotate(0deg);   }
 section.turntable .list ul li:nth-child(2)  { transform: rotate(45deg);  }
 section.turntable .list ul li:nth-child(3)  { transform: rotate(90deg);  }
-section.turntable .list ul li:nth-child(4)  { transform: rotate(135deg); }
-section.turntable .list ul li:nth-child(5)  { transform: rotate(180deg); }
-section.turntable .list ul li:nth-child(6)  { transform: rotate(225deg); }
-section.turntable .list ul li:nth-child(7)  { transform: rotate(270deg); }
-section.turntable .list ul li:nth-child(8)  { transform: rotate(315deg); }
-
-/* 奖品图标 & 名称 */
+section.turntable .list ul li:nth-child(4)  { transform: rotate(135deg);}
+section.turntable .list ul li:nth-child(5)  { transform: rotate(180deg);}
+section.turntable .list ul li:nth-child(6)  { transform: rotate(225deg);}
+section.turntable .list ul li:nth-child(7)  { transform: rotate(270deg);}
+section.turntable .list ul li:nth-child(8)  { transform: rotate(315deg);}
 section.turntable .list ul li img {
   width: 100px;
   margin-top: 5px;
 }
 .prize-name {
   margin-top: 10px;
-  word-break: break-word;
   line-height: 1.2;
   font-size: 1.6rem;
+  font-weight: bold;
   color: #f72f26;
   text-align: center;
 }
 
-/* GO 按钮 */
+/* 中心 GO 按钮 */
 section.turntable .turntable_btn {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 50%; top: 50%;
   transform: translate(-50%, -50%);
-  width: 30%;
-  height: 30%;
+  width: 30%; height: 30%;
   border: none;
   border-radius: 50%;
   background-color: #ffb929;
-  color: #ea3325;
+  color: #fff;
   font-size: 6rem;
   font-weight: 900;
   cursor: pointer;
   outline: none;
 }
 section.turntable .turntable_btn:disabled {
-  background-color: #bbb;
+  background-color: #fce099;
   cursor: not-allowed;
 }
 section.turntable .turntable_btn::after {
   content: "";
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 50%; top: 50%;
   transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
-  background-color: #ffe3a8;
+  width: 80%; height: 80%;
+  background-color: #ef4b4b;
   border-radius: 50%;
   box-shadow: 1px 2px 4px rgba(0,0,0,0.3);
   z-index: -1;
 }
 
-/* 圆环描边分层 */
-/* 4. 中心圆环（非 .outer‑ring）纯色描边 */
-section.turntable svg > circle:not(.outer-ring) {
-  fill: none;
-  stroke: #ffe089;
-  stroke-width: 5px;
-}
-/* 5. 外框圆环（.outer‑ring）渐变描边 */
-section.turntable svg > circle.outer-ring {
-  fill: none;
-  stroke: url(#outer-gradient);
-  stroke-width: 5px;
-  /* 微收缩防止溢出 */
-  transform: scale(0.95);
-  transform-origin: center center;
+/* SVG 自然流 */
+section.turntable svg {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-/* 扇区分隔线 */
-section.turntable svg g.polyline {
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: transform 4.5s cubic-bezier(0.25,0.1,0.25,1);
-}
-section.turntable svg g.polyline polyline:nth-child(odd)  { fill: #fdd1c2; }
-section.turntable svg g.polyline polyline:nth-child(even) { fill: #fffdfe; }
-
-/* 小圆点闪烁 */
+/* 16 个闪烁小圆点 */
 section.turntable svg g.circle {
   transform-box: fill-box;
-  transform-origin: center;
+  transform-origin: center center;
 }
 section.turntable svg g.circle circle {
   fill: #fff;
@@ -194,17 +188,42 @@ section.turntable svg g.circle circle {
 section.turntable svg g.circle circle:nth-child(odd)  { animation: shiny 1s linear infinite; }
 section.turntable svg g.circle circle:nth-child(even) { animation: shiny 1s 0.5s linear infinite; }
 
+/* 扇区填充和分隔线 */
+section.turntable svg g.polyline {
+  transform-box: fill-box;
+  transform-origin: center center;
+  transition: transform 4.5s cubic-bezier(0.25,0.1,0.25,1);
+}
+section.turntable svg g.polyline polyline:nth-child(odd)  { fill: #fdd1c2; }
+section.turntable svg g.polyline polyline:nth-child(even) { fill: #fffdfe; }
+section.turntable svg g.polyline line {
+  stroke: #f72f26;
+  stroke-width: 1;
+  stroke-linecap: butt;
+  vector-effect: non-scaling-stroke;
+}
+
 /* 指针装饰 */
 section.turntable svg g.mark circle            { fill: #fe4e2c; }
 section.turntable svg g.mark circle.round      { fill: none; stroke: #ffebc2; }
 section.turntable svg g.mark polyline          { fill: #fe4e2c; }
 
-/* 强制满高 & 响应式 */
-html, body, #app { height: 100%; }
+/* 底座阴影 下移 5px */
+section.turntable svg g.bottom {
+  fill: rgba(184, 80, 0, 0.4);
+  transform-box: fill-box;
+  transform-origin: center center;
+  transform: translateY(5px);
+}
+
+/* 响应式略 */
+html, body, #app {
+  height: 100%;
+}
 @media (max-width: 767px) {
   .prize-name { font-size: 1rem; }
   section.turntable .list ul li img { width: 70px; }
-  section.turntable .turntable_btn      { font-size: 4rem; }
+  section.turntable .turntable_btn { font-size: 4rem; }
 }
 @media (max-width: 400px) {
   section.turntable .list ul li img { display: none; }
