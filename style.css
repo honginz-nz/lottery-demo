@@ -14,13 +14,13 @@
   box-sizing: border-box;
 }
 
+/* 背景渐变 & 字体 */
 body {
-  /* 背景：45度渐变，两端 #f33318，中间 #ffa03c */
   background: linear-gradient(45deg, #f33318 0%, #ffa03c 50%, #f33318 100%);
   font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
 
-/* 最外层容器 */
+/* 容器 */
 .container {
   max-width: 1000px;
   min-width: 400px;
@@ -30,7 +30,7 @@ body {
   overflow: hidden;
 }
 
-/* —— 输入区域 —— */
+/* 输入区 */
 .input-area {
   text-align: center;
   margin-bottom: 10px;
@@ -63,14 +63,12 @@ section.turntable {
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
-  /* 整体缩小 10% */
   transform: scale(0.9);
   transform-origin: center center;
-  /* 整体上移以靠近输入框 */
   margin-top: -50px;
 }
 
-/* 奖项列表容器 */
+/* 奖项列表 */
 section.turntable .list {
   position: absolute;
   left: 50%;
@@ -83,7 +81,7 @@ section.turntable .list {
   text-align: center;
 }
 
-/* 扇区列表 */
+/* 扇区旋转 */
 section.turntable .list ul {
   list-style: none;
   width: 100%;
@@ -91,8 +89,6 @@ section.turntable .list ul {
   transform-origin: center center;
   transition: transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
-
-/* 单个扇区 */
 section.turntable .list ul li {
   position: absolute;
   width: 100%;
@@ -102,8 +98,6 @@ section.turntable .list ul li {
   align-items: center;
   justify-content: flex-start;
 }
-
-/* 8 项扇区起始角度 */
 section.turntable .list ul li:nth-child(1)  { transform: rotate(0deg);   }
 section.turntable .list ul li:nth-child(2)  { transform: rotate(45deg);  }
 section.turntable .list ul li:nth-child(3)  { transform: rotate(90deg);  }
@@ -113,16 +107,13 @@ section.turntable .list ul li:nth-child(6)  { transform: rotate(225deg); }
 section.turntable .list ul li:nth-child(7)  { transform: rotate(270deg); }
 section.turntable .list ul li:nth-child(8)  { transform: rotate(315deg); }
 
-/* 奖品图标 */
+/* 奖品图标 & 名称 */
 section.turntable .list ul li img {
   width: 100px;
   margin-top: 5px;
 }
-
-/* 奖品名称 */
 .prize-name {
   margin-top: 10px;
-  white-space: normal;
   word-break: break-word;
   line-height: 1.2;
   font-size: 1.6rem;
@@ -130,7 +121,7 @@ section.turntable .list ul li img {
   text-align: center;
 }
 
-/* 中心 GO 按钮 */
+/* GO 按钮 */
 section.turntable .turntable_btn {
   position: absolute;
   left: 50%;
@@ -165,27 +156,21 @@ section.turntable .turntable_btn::after {
   z-index: -1;
 }
 
-/* SVG 圆环分层描边 */
-/* 仅作用于 SVG 的直接子 circle（中心圈）纯色描边 */
+/* 圆环描边分层 */
+/* 4. 中心圆环（非 .outer‑ring）纯色描边 */
 section.turntable svg > circle:not(.outer-ring) {
   fill: none;
   stroke: #ffe089;
   stroke-width: 5px;
 }
-/* 仅作用于 SVG 的直接子 circle.outer-ring（外框圈）渐变描边并稍微缩小 */
+/* 5. 外框圆环（.outer‑ring）渐变描边 */
 section.turntable svg > circle.outer-ring {
   fill: none;
   stroke: url(#outer-gradient);
   stroke-width: 5px;
+  /* 微收缩防止溢出 */
   transform: scale(0.95);
   transform-origin: center center;
-}
-
-/* 底座阴影下移 */
-section.turntable svg g.bottom ellipse {
-  transform-box: fill-box;
-  transform-origin: center;
-  transform: translateY(4px);
 }
 
 /* 扇区分隔线 */
@@ -197,7 +182,7 @@ section.turntable svg g.polyline {
 section.turntable svg g.polyline polyline:nth-child(odd)  { fill: #fdd1c2; }
 section.turntable svg g.polyline polyline:nth-child(even) { fill: #fffdfe; }
 
-/* 外圈 16 个闪烁小圆点 */
+/* 小圆点闪烁 */
 section.turntable svg g.circle {
   transform-box: fill-box;
   transform-origin: center;
@@ -214,12 +199,8 @@ section.turntable svg g.mark circle            { fill: #fe4e2c; }
 section.turntable svg g.mark circle.round      { fill: none; stroke: #ffebc2; }
 section.turntable svg g.mark polyline          { fill: #fe4e2c; }
 
-/* 强制满高，保证垂直布局 */
-html, body, #app {
-  height: 100%;
-}
-
-/* 响应式 */
+/* 强制满高 & 响应式 */
+html, body, #app { height: 100%; }
 @media (max-width: 767px) {
   .prize-name { font-size: 1rem; }
   section.turntable .list ul li img { width: 70px; }
