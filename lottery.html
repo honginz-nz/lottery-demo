@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>订单抽奖大转盘</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script>
 </head>
 <body>
   <div id="app" class="container">
-    <!-- 输入区 -->
+    <!-- —— 输入区域 —— -->
     <div class="input-area">
       <input v-model="orderInput" type="text" placeholder="输入订单号"/>
       <button @click="startDraw" :disabled="isSpinning">开始抽奖</button>
     </div>
 
-    <!-- 转盘 -->
+    <!-- —— 转盘区域 —— -->
     <section class="turntable">
       <div class="list">
         <ul :style="{ transform: `rotate(${currentRotation}deg)` }">
@@ -33,22 +33,24 @@
       <!-- 中心 GO 按钮 -->
       <button class="turntable_btn" :disabled="isSpinning">GO</button>
 
-      <!-- SVG 图层 -->
+      <!-- SVG 装饰层 -->
       <svg viewBox="-50 -50 100 100">
         <!-- 1. 径向渐变定义 -->
         <defs>
-          <radialGradient id="outer-gradient" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse">
+          <radialGradient id="outer-gradient"
+                          cx="50%" cy="50%" r="50%"
+                          gradientUnits="userSpaceOnUse">
             <stop offset="0%"   stop-color="#fe9a24"/>
             <stop offset="100%" stop-color="#ffe089"/>
           </radialGradient>
         </defs>
 
-        <!-- 底座阴影 -->
+        <!-- 2. 底座阴影（最底层） -->
         <g class="bottom">
           <ellipse cx="0" cy="40" rx="30" ry="4"/>
         </g>
 
-        <!-- 扇区分隔线 -->
+        <!-- 3. 扇区分隔线 -->
         <g class="polyline" :style="{ transform: `rotate(${currentRotation}deg)` }">
           <polyline points="-16,-38 16,-38 0,0"/>
           <polyline points="16,-38 38,-16 0,0"/>
@@ -60,13 +62,13 @@
           <polyline points="-16,-38 -38,-16 0,0"/>
         </g>
 
-        <!-- 中心圆环（纯色描边） -->
+        <!-- 4. 中心圆环（纯色描边） -->
         <circle cx="0" cy="0" r="40"/>
 
-        <!-- 外框圆环（径向渐变描边，且缩小以防溢出） -->
+        <!-- 5. 渐变外框圆环（保持居中） -->
         <circle class="outer-ring" cx="0" cy="0" r="48"/>
 
-        <!-- 外圈 16 个小圆点 -->
+        <!-- 6. 16 个小圆点——移到最外层，与 outer‑ring 同级 -->
         <g class="circle"
            :style="{
              transform: `rotate(${currentRotation}deg)`,
@@ -74,7 +76,7 @@
                ? 'transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1)'
                : 'none'
            }">
-          <circle cx="0" cy="-40" r="0.8"/>
+          <circle cx="0"    cy="-40" r="0.8"/>
           <circle cx="15.6" cy="-36.8" r="0.8"/>
           <circle cx="28.5" cy="-28"   r="0.8"/>
           <circle cx="36.8" cy="-15.6" r="0.8"/>
@@ -82,17 +84,17 @@
           <circle cx="36.8" cy="15.6"  r="0.8"/>
           <circle cx="28.5" cy="28"    r="0.8"/>
           <circle cx="15.6" cy="36.8"  r="0.8"/>
-          <circle cx="0"   cy="40"     r="0.8"/>
-          <circle cx="-15.6" cy="36.8" r="0.8"/>
-          <circle cx="-28.5" cy="28"   r="0.8"/>
-          <circle cx="-36.8" cy="15.6" r="0.8"/>
-          <circle cx="-40"   cy="0"    r="0.8"/>
-          <circle cx="-36.8" cy="-15.6"r="0.8"/>
-          <circle cx="-28.5" cy="-28"  r="0.8"/>
-          <circle cx="-15.6" cy="-36.8"r="0.8"/>
+          <circle cx="0"    cy="40"    r="0.8"/>
+          <circle cx="-15.6"cy="36.8"  r="0.8"/>
+          <circle cx="-28.5"cy="28"    r="0.8"/>
+          <circle cx="-36.8"cy="15.6"  r="0.8"/>
+          <circle cx="-40"  cy="0"     r="0.8"/>
+          <circle cx="-36.8"cy="-15.6" r="0.8"/>
+          <circle cx="-28.5"cy="-28"   r="0.8"/>
+          <circle cx="-15.6"cy="-36.8" r="0.8"/>
         </g>
 
-        <!-- 指针装饰 -->
+        <!-- 7. 指针装饰（最顶层） -->
         <g class="mark">
           <circle cx="0" cy="-43" r="4"/>
           <polyline points="-3.5,-41 3.5,-41 0,-35"/>
