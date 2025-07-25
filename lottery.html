@@ -1,107 +1,169 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>订单抽奖大转盘</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script>
 </head>
 <body>
   <div id="app" class="container">
-    <!-- —— 输入区域 —— -->
+    <!-- 输入区 -->
     <div class="input-area">
       <input v-model="orderInput" type="text" placeholder="输入订单号"/>
-      <button @click="startDraw" :disabled="isSpinning">开始抽奖</button>
+      <button
+        @click="startDraw"
+        :disabled="!orderInput || isSpinning"
+      >开始抽奖</button>
     </div>
 
-    <!-- —— 转盘区域 —— -->
-    <section class="turntable">
-      <div class="list">
-        <ul :style="{ transform: `rotate(${currentRotation}deg)` }">
-          <li
-            v-for="(prize, index) in prizeList"
-            :key="index"
-            :style="{ transform: `rotate(${index * (360 / prizeList.length)}deg)` }"
-          >
-            <img :src="prize.img" :alt="prize.name"/>
-            <div class="prize-name" v-html="prize.name"></div>
-          </li>
-        </ul>
+    <!-- 三栏主区 -->
+    <div class="main-content">
+      <!-- 左侧：活动说明 -->
+      <div class="sidebar left">
+        <h3>幸运大转盘活动说明</h3>
+        <p>
+          11点转动幸运大转盘<br>
+          10点下单的客人，均可参与11点抽奖<br>
+          13点-15点下单的客人，均可参与15点抽奖每个订单号限抽奖 1 次，中奖商品不可退还。
+        </p>
       </div>
 
-      <!-- 中心 GO 按钮 -->
-      <button class="turntable_btn" :disabled="isSpinning">GO</button>
+      <!-- 中间：转盘主体 -->
+      <section class="turntable">
+        <!-- 奖项列表 -->
+        <div class="list">
+          <ul :style="{ transform: `rotate(${currentRotation}deg)` }">
+            <li
+              v-for="(prize, index) in prizeList"
+              :key="index"
+              :style="{ transform: `rotate(${index * (360 / prizeList.length)}deg)` }"
+            >
+              <img :src="prize.img" :alt="prize.name"/>
+              <div class="prize-name" v-html="prize.name"></div>
+            </li>
+          </ul>
+        </div>
 
-      <!-- SVG 装饰层 -->
-      <svg viewBox="-50 -50 100 100">
-        <!-- 1. 径向渐变定义 -->
-        <defs>
-          <radialGradient id="outer-gradient"
-                          cx="50%" cy="50%" r="50%"
-                          gradientUnits="userSpaceOnUse">
-            <stop offset="0%"   stop-color="#fe9a24"/>
-            <stop offset="100%" stop-color="#ffe089"/>
-          </radialGradient>
-        </defs>
+        <!-- GO 按钮 -->
+        <button
+          class="turntable_btn"
+          @click="startDraw"
+          :disabled="!orderInput || isSpinning"
+        >GO</button>
 
-        <!-- 2. 底座阴影（最底层） -->
-        <g class="bottom">
-          <ellipse cx="0" cy="40" rx="30" ry="4"/>
-        </g>
+        <!-- SVG 装饰层 -->
+        <svg viewBox="-50 -50 100 100">
+          <defs>
+            <!-- 外侧渐变环 -->
+            <radialGradient id="outer-gradient" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="41.75">
+              <stop offset="95%"  stop-color="#ffb837"/>
+              <stop offset="140%" stop-color="#fed68b"/>
+            </radialGradient>
+            <!-- 内侧渐变环 -->
+            <radialGradient id="inner-gradient" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="38">
+              <stop offset="98%"  stop-color="#fe9a24"/>
+              <stop offset="140%" stop-color="#f98904"/>
+            </radialGradient>
+          </defs>
 
-        <!-- 3. 扇区分隔线 -->
-        <g class="polyline" :style="{ transform: `rotate(${currentRotation}deg)` }">
-          <polyline points="-16,-38 16,-38 0,0"/>
-          <polyline points="16,-38 38,-16 0,0"/>
-          <polyline points="38,-16 38,16 0,0"/>
-          <polyline points="0,0 38,16 16,38"/>
-          <polyline points="0,0 16,38 -16,38"/>
-          <polyline points="0,0 -16,38 -38,16"/>
-          <polyline points="-38,-16 -38,16 0,0"/>
-          <polyline points="-16,-38 -38,-16 0,0"/>
-        </g>
+          <!-- 底座阴影 -->
+          <g class="bottom">
+            <ellipse cx="0" cy="40" rx="30" ry="4"/>
+          </g>
 
-        <!-- 4. 中心圆环（纯色描边） -->
-        <circle cx="0" cy="0" r="40"/>
+          <!-- 扇区分隔填充 & 线 -->
+          <g
+            class="polyline"
+            :style="{ transform: `rotate(${currentRotation}deg)` }"
+            transform-box="fill-box"
+            transform-origin="center center"
+          >
+            <!-- 填充 -->
+            <polyline points="-16,-38 16,-38 0,0"/>
+            <polyline points="16,-38 38,-16 0,0"/>
+            <polyline points="38,-16 38,16 0,0"/>
+            <polyline points="0,0 38,16 16,38"/>
+            <polyline points="0,0 16,38 -16,38"/>
+            <polyline points="0,0 -16,38 -38,16"/>
+            <polyline points="-38,-16 -38,16 0,0"/>
+            <polyline points="-16,-38 -38,-16 0,0"/>
+            <!-- 8 条 1px 分隔线 -->
+            <line x1="0" y1="0" x2="0"  y2="-38" transform="rotate(22.5)"/>
+            <line x1="0" y1="0" x2="0"  y2="-38" transform="rotate(67.5)"/>
+            <line x1="0" y1="0" x2="0"  y2="-38" transform="rotate(112.5)"/>
+            <line x1="0" y1="0" x2="0"  y2="-38" transform="rotate(157.5)"/>
+            <line x1="0" y1="0" x2="0"  y2="-38" transform="rotate(202.5)"/>
+            <line x1="0" y1="0" x2="0"  y2="-38" transform="rotate(247.5)"/>
+            <line x1="0" y1="0" x2="0"  y2="-38" transform="rotate(292.5)"/>
+            <line x1="0" y1="0" x2="0"  y2="-38" transform="rotate(337.5)"/>
+          </g>
 
-        <!-- 5. 渐变外框圆环（保持居中） -->
-        <circle class="outer-ring" cx="0" cy="0" r="48"/>
+          <!-- 内侧环 -->
+          <circle
+            cx="0" cy="0" r="38"
+            fill="none"
+            stroke="url(#inner-gradient)"
+            stroke-width="2.5"
+          />
+          <!-- 外侧环 -->
+          <circle
+            cx="0" cy="0" r="41.75"
+            fill="none"
+            stroke="url(#outer-gradient)"
+            stroke-width="5"
+            transform-box="fill-box"
+            transform-origin="center"
+          />
 
-        <!-- 6. 16 个小圆点——移到最外层，与 outer‑ring 同级 -->
-        <g class="circle"
-           :style="{
-             transform: `rotate(${currentRotation}deg)`,
-             transition: isSpinning
-               ? 'transform 4.5s cubic-bezier(0.25, 0.1, 0.25, 1)'
-               : 'none'
-           }">
-          <circle cx="0"    cy="-40" r="0.8"/>
-          <circle cx="15.6" cy="-36.8" r="0.8"/>
-          <circle cx="28.5" cy="-28"   r="0.8"/>
-          <circle cx="36.8" cy="-15.6" r="0.8"/>
-          <circle cx="40"   cy="0"     r="0.8"/>
-          <circle cx="36.8" cy="15.6"  r="0.8"/>
-          <circle cx="28.5" cy="28"    r="0.8"/>
-          <circle cx="15.6" cy="36.8"  r="0.8"/>
-          <circle cx="0"    cy="40"    r="0.8"/>
-          <circle cx="-15.6"cy="36.8"  r="0.8"/>
-          <circle cx="-28.5"cy="28"    r="0.8"/>
-          <circle cx="-36.8"cy="15.6"  r="0.8"/>
-          <circle cx="-40"  cy="0"     r="0.8"/>
-          <circle cx="-36.8"cy="-15.6" r="0.8"/>
-          <circle cx="-28.5"cy="-28"   r="0.8"/>
-          <circle cx="-15.6"cy="-36.8" r="0.8"/>
-        </g>
+          <!-- 16 个闪烁点 -->
+          <g
+            class="circle"
+            transform-box="fill-box"
+            transform-origin="center center"
+            :style="{
+              transform: `rotate(${currentRotation}deg) scale(1.044)`,
+              transition: isSpinning
+                ? 'transform 4.5s cubic-bezier(0.25,0.1,0.25,1)'
+                : 'none'
+            }"
+          >
+            <circle cx="0"    cy="-40"   r="0.8"/>
+            <circle cx="15.6" cy="-36.8" r="0.8"/>
+            <circle cx="28.5" cy="-28"   r="0.8"/>
+            <circle cx="36.8" cy="-15.6" r="0.8"/>
+            <circle cx="40"   cy="0"     r="0.8"/>
+            <circle cx="36.8" cy="15.6"  r="0.8"/>
+            <circle cx="28.5" cy="28"    r="0.8"/>
+            <circle cx="15.6" cy="36.8"  r="0.8"/>
+            <circle cx="0"    cy="40"    r="0.8"/>
+            <circle cx="-15.6"cy="36.8"  r="0.8"/>
+            <circle cx="-28.5"cy="28"    r="0.8"/>
+            <circle cx="-36.8"cy="15.6"  r="0.8"/>
+            <circle cx="-40"  cy="0"     r="0.8"/>
+            <circle cx="-36.8"cy="-15.6" r="0.8"/>
+            <circle cx="-28.5"cy="-28"   r="0.8"/>
+            <circle cx="-15.6"cy="-36.8" r="0.8"/>
+          </g>
 
-        <!-- 7. 指针装饰（最顶层） -->
-        <g class="mark">
-          <circle cx="0" cy="-43" r="4"/>
-          <polyline points="-3.5,-41 3.5,-41 0,-35"/>
-          <circle class="round" cx="0" cy="-43" r="1.5"/>
-        </g>
-      </svg>
-    </section>
+          <!-- 指针装饰 -->
+          <g class="mark">
+            <circle cx="0" cy="-43" r="4"/>
+            <polyline points="-3.5,-41 3.5,-41 0,-35"/>
+            <circle class="round" cx="0" cy="-43" r="1.5"/>
+          </g>
+        </svg>
+      </section>
+
+      <!-- 右侧：实时播报 -->
+      <div class="sidebar right">
+        <h3>实时播报</h3>
+        <ul>
+          <li v-for="(msg, i) in messages" :key="i">{{ msg }}</li>
+        </ul>
+      </div>
+    </div>
   </div>
 
   <script src="app.js"></script>
