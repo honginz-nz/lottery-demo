@@ -7,7 +7,8 @@ new Vue({
       orderPrizeMap: {},
       isSpinning: false,
       currentRotation: 0,
-      finalPrizeName: ''
+      finalPrizeName: '',
+      messages: []    // 新增：存放播报信息
     };
   },
   created() {
@@ -32,20 +33,19 @@ new Vue({
   },
   methods: {
     startDraw() {
-      // 校验：必须是 9 位数字
+      if (!this.orderInput || this.isSpinning) return;
+
       const key = this.orderInput.trim();
       if (!/^\d{9}$/.test(key)) {
         alert('订单号输入有误');
         return;
       }
-      if (this.isSpinning) return;
-      this.isSpinning = true;
 
+      this.isSpinning = true;
       const seg      = 360 / this.prizeList.length;
       const fullSpin = 4 * 360;
       const prevMod  = ((this.currentRotation % 360) + 360) % 360;
 
-      // 决定中奖索引：优先映射订单号，否则随机（排除免单 index=3）
       let winIdx;
       if (this.orderPrizeMap[key] != null) {
         winIdx = this.orderPrizeMap[key];
@@ -54,7 +54,6 @@ new Vue({
         winIdx = pool[Math.floor(Math.random() * pool.length)];
       }
 
-      // 计算 delta，让转盘准确停到 winIdx
       const targetOff = (360 - winIdx * seg) % 360;
       const delta     = (targetOff - prevMod + 360) % 360;
       this.currentRotation += fullSpin + delta;
@@ -62,10 +61,11 @@ new Vue({
       setTimeout(() => {
         this.isSpinning     = false;
         this.finalPrizeName = this.prizeList[winIdx].name;
-
-        // 去掉所有标签，再提示
         const text = this.finalPrizeName.replace(/<[^>]+>/g, '');
         alert(`恭喜获得：${text}！`);
+
+        // 播报信息插入到最前面
+        this.messages.unshift(`恭喜 订单号：${key} 获得奖品${text}！`);
       }, 4500);
     }
   }
