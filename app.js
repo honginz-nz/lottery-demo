@@ -19,14 +19,14 @@ new Vue({
         this.prizeList = Array.isArray(data.prizeList)
           ? data.prizeList
           : [
-              { name: "饮料",               img: "images/boxeddrink.png"      },
-              { name: "巧克力",             img: "images/chocolate.png"       },
-              { name: "$5优惠券<br/>小程序可用", img: "images/coupon.png"    },
-              { name: "免单",               img: "images/free.png"            },
-              { name: "保健品",             img: "images/healthsupplements.png"},
-              { name: "麦卢卡蜂蜜",         img: "images/honey.png"           },
-              { name: "安佳全脂奶粉",       img: "images/milkpowder.png"      },
-              { name: "牙膏",               img: "images/toothpaste.png"      }
+              { name: "巧克力奶",               img: "images/vitasoychocolate.png"      },
+              { name: "菊花茶",                img: "images/vitajuhuacha.png"       },
+              { name: "自制冰棒机",             img: "images/zokuquickpopmaker.png"    },
+              { name: "爆米花机",               img: "images/popcornmaker.png"            },
+              { name: "指甲护理套装",             img: "images/schollvelvetsmooth.png"},
+              { name: "再减$10",                img: "images/10nzd.png"           },
+              { name: "再减5%",                 img: "images/5off.png"      },
+              { name: "全额返还",                 img: "images/free.png"      }
             ];
       })
       .catch(console.error);
@@ -48,9 +48,9 @@ new Vue({
 
       let winIdx;
       if (this.orderPrizeMap[key] != null) {
-        winIdx = this.orderPrizeMap[key];
+        winIdx = this.orderPrizeMap[key];  // 有白名单的订单，固定中奖
       } else {
-        const pool = this.prizeList.map((_, i) => i).filter(i => i !== 3);
+        const pool = this.prizeList.map((_, i) => i).filter(i => i !== 7);
         winIdx = pool[Math.floor(Math.random() * pool.length)];
       }
 
